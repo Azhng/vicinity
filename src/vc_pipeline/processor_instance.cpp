@@ -20,6 +20,7 @@ ProcessorInstance::ProcessorInstance(ProcessorBase* processor,
 
 void ProcessorInstance::runProcessor() {
     // Phase 1 Implementation
+    // TODO: refactor this into middleware stack pattern
 
     // check if pipeline is being cancelled 
     if (pipeline_context->getPipelineState() == (PipelineState::CANCELLED | PipelineState::ERROR)) {
@@ -46,7 +47,16 @@ void ProcessorInstance::runProcessor() {
         }
     }
 
-    processor->run(processor_context.get());
+    try {
+        processor->run(processor_context.get());
+
+        if (processor->getProcessorType() != ProcessorType::Egress) {
+            // TODO: figure job submission detail
+        }
+    } catch (const std::runtime_error& e) {
+       pipeline_context->setPipelineState(PipelineState::ERROR);
+       pipeline_context->setLastErrorMessage("[ERROR]: An error has occur during the pipeline execution with error message: " + string(e.what()));
+    }
 
 }
 
