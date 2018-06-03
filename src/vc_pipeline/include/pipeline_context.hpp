@@ -1,16 +1,22 @@
 #pragma once
 
 #include <string>
+#include <queue>
 #include "./pipeline_state.hpp"
 
 namespace vc {
 
 using std::string;
+using std::queue;
+
+class ProcessorInstance;
 
 class PipelineContext {
 
     PipelineState pipeline_state;
     string last_error_message;
+
+    queue<ProcessorInstance*> job_queue;
 
 public: 
 
@@ -28,6 +34,16 @@ public:
 
     void setLastErrorMessage(string message) {
         last_error_message = message;
+    }
+
+    void submitJob(ProcessorInstance* job) {
+        job_queue.push(job);
+    }
+
+    ProcessorInstance* nextJob() {
+        ProcessorInstance* next_job = job_queue.front();
+        job_queue.pop();
+        return next_job;
     }
 
 };
