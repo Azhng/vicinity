@@ -3,8 +3,11 @@
 #include <cassert>
 #include <iostream>
 #include <vector>
+#include <opencv2/opencv.hpp>
 
 using namespace std;
+using namespace cv;
+
 
 vc::ProcessorContext::ProcessorContext(ProcessorInstance* processor_instance,
                                        const PipelineContext* pipeline_context)
@@ -41,3 +44,36 @@ vc::ProcessorContext::ProcessorContext(ProcessorInstance* processor_instance,
     }
 
 }
+
+unique_ptr<Mat> vc::ProcessorContext::fromInport(string port_name) {
+    if (inports.find(port_name) == inports.end()) {
+        throw std::runtime_error("[ERROR]: Accessing invalid key");
+    }
+
+    return std::move(inports[port_name]);
+}
+
+unique_ptr<Mat> vc::ProcessorContext::fromOutport(string port_name) {
+    if (outports.find(port_name) == outports.end()) {
+        throw std::runtime_error("[ERROR]: Accessing invalid key");
+    }
+
+    return std::move(outports[port_name]);
+}
+
+void vc::ProcessorContext::toInport(string port_name, unique_ptr<Mat> data) {
+    if (inports.find(port_name) == inports.end()) {
+        throw std::runtime_error("[ERROR]: Accessing invalid key");
+    }
+
+    inports[port_name] = std::move(data);
+}
+
+void vc::ProcessorContext::toOutport(string port_name, unique_ptr<Mat> data) {
+    if (outports.find(port_name) == outports.end()) {
+        throw std::runtime_error("[ERROR]: Accessing invalid key");
+    }
+
+    outports[port_name] = std::move(data);
+}
+

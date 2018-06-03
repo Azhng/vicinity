@@ -16,4 +16,12 @@ ProcessorInstance::ProcessorInstance(ProcessorBase* processor,
            processor_context{make_unique<ProcessorContext>(this, pipeline_context)} { }
 
 
+void ProcessorInstance::runProcessor() {
+    // TODO: run processor stage
+    for (const ProcessorInstance* parent_context : parent_processors) {
+
+    }
+
+}
+
 ProcessorInstance::~ProcessorInstance() {}

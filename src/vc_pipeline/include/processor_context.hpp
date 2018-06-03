@@ -29,6 +29,30 @@ public:
 
     explicit ProcessorContext(ProcessorInstance*, const PipelineContext*);
 
+    // Phase 1 API:
+
+    void toInport(string, unique_ptr<Mat>);
+
+    unique_ptr<Mat> fromInport(string);
+
+    void toOutport(string, unique_ptr<Mat>);
+
+    unique_ptr<Mat> fromOutport(string);
+
+    // Phase 2 API:
+
+    //template <typename T>
+    //void toInport(string, unique_ptr<T>);
+
+    //template <typename T>
+    //unique_ptr<T> fromInport(string);
+
+    //template <typename T>
+    //void toOutport(string, unique_ptr<T>);
+
+    //template <typename T>
+    //unique_ptr<T> fromOutport(string);
+
 
 };
 

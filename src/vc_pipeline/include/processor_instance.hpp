@@ -42,6 +42,7 @@ public:
         child_processor->parent_processors.push_back(this);
     }
 
+    void runProcessor();
 
     const vector<ProcessorInstance*>& children() const {
         return this->child_processors;
@@ -55,8 +56,11 @@ public:
         return processor.get();
     }
 
-    ~ProcessorInstance();
+    ProcessorContext* getProcessorContext() {
+        return processor_context.get();
+    }
 
+    ~ProcessorInstance();
 
 };
 
