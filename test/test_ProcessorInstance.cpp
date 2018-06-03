@@ -1,11 +1,10 @@
 #include <cassert>
 #include <string>
+#include <iostream>
 #include "../src/vc_pipeline/include/processor_type.hpp"
 #include "../src/vc_pipeline/include/processor_base.hpp" 
 #include "../src/vc_pipeline/include/processor_context.hpp"
 #include "../src/vc_pipeline/include/processor_instance.hpp"
-
-#define TESTING
 
 using namespace vc;
 using namespace std;
@@ -15,9 +14,11 @@ class MockIngress : public ProcessorBase {
 
 public:
     explicit MockIngress()
-        : ProcessorBase(ProcessorType::Ingress) { }
+        : ProcessorBase(ProcessorType::Ingress) {
+        define_outport("outport");
+    }
 private:
-    void processor_function(ProcessorContext* ctx) override { }
+    void processor_function(ProcessorContext*) override { }
 };
 
 class MockTransform : public ProcessorBase {
@@ -25,9 +26,12 @@ class MockTransform : public ProcessorBase {
 
 public:
     explicit MockTransform()
-        : ProcessorBase(ProcessorType::Transform) { }
+        : ProcessorBase(ProcessorType::Transform) {
+        define_inport("inport");
+        define_outport("outport");
+    }
 private:
-    void processor_function(ProcessorContext* ctx) override { }
+    void processor_function(ProcessorContext*) override { }
 
 };
 

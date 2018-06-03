@@ -1,4 +1,7 @@
 #include "./include/processor_base.hpp"
+#include <iostream>
+
+using namespace std;
 
 void vc::ProcessorBase::define_inport(string port_name) {
         if(inports.size() == 0 && processor_type != ProcessorType::Ingress) {
@@ -18,7 +21,7 @@ void vc::ProcessorBase::define_outport(string port_name) {
             outports.push_back(port_name);
         } else {
             if (processor_type == ProcessorType::Egress) {
-                throw std::runtime_error("[ERROR] Adding inports to an Egress element");
+                throw std::runtime_error("[ERROR] Adding outports to an Egress element");
             } else {
                 throw std::runtime_error("[ERROR] Unimplemented feature: Multiple named outports");
             }

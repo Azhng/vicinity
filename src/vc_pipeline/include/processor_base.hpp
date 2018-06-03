@@ -37,6 +37,18 @@ public:
         processor_function(ctx);
     }
 
+    const ProcessorType& getProcessorType() const {
+        return processor_type;
+    }
+
+    const vector<string>& getInportNames() const {
+        return inports;
+    }
+
+    const vector<string>& getOutportNames() const {
+        return outports;
+    }
+
     virtual ~ProcessorBase() {}
 
 private:

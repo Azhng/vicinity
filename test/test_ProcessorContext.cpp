@@ -13,19 +13,19 @@ class MockProcessor : public ProcessorBase {
 public:
 
     explicit MockProcessor()
-        : ProcessorBase(ProcessorType::Ingress) { }
+        : ProcessorBase(ProcessorType::Ingress) {
+        define_outport("outports");
+    }
 
 private:
 
-    void processor_function(ProcessorContext* ctx) override { }
+    void processor_function(ProcessorContext*) override { }
 
 };
 
 
 
 int main() {
-
-    ProcessorContext dummy_context(nullptr, nullptr);
 
     ProcessorBase* processor_core = new MockProcessor();
     ProcessorInstance processor(processor_core, nullptr);

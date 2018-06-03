@@ -27,7 +27,7 @@ public:
 
 private:
 
-    void processor_function(ProcessorContext* ctx) override { }
+    void processor_function(ProcessorContext*) override { }
 
 };
 
@@ -42,7 +42,7 @@ public:
             define_outport("defining invalid inport");
             assert(false); // this line should not be executed
         } catch (const std::exception& e) {
-            assert(string(e.what()) == "[ERROR] Adding inports to an Egress element");
+            assert(string(e.what()) == "[ERROR] Adding outports to an Egress element");
         }
 
         define_inport("inport");
@@ -50,12 +50,11 @@ public:
 
 private:
 
-    void processor_function(ProcessorContext* ctx) override { }
+    void processor_function(ProcessorContext*) override { }
 
 };
 int main() {
 
-    ProcessorContext dummy_context(nullptr, nullptr);
     ProcessorBase* ingress = new MockProcessorIngress();
     ProcessorBase* egress = new MockProcessorEgress();
     delete ingress;

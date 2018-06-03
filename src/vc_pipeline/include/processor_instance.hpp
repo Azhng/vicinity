@@ -3,14 +3,12 @@
 #include <memory>
 #include <vector>
 #include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp>
 #include "./pipeline_context.hpp"
 #include "./processor_context.hpp"
 #include "./processor_base.hpp"
 
 namespace vc {
 
-using boost::uuids::random_generator;
 using boost::uuids::uuid;
 using std::unique_ptr;
 using std::make_unique;
@@ -36,12 +34,7 @@ class ProcessorInstance {
 
 public:
 
-    explicit ProcessorInstance(ProcessorBase* processor,
-            const PipelineContext* pipeline_context)
-        :  processor_instance_uuid{random_generator()()},
-           processor{std::unique_ptr<ProcessorBase>(processor)},
-           processor_context{make_unique<ProcessorContext>(this, pipeline_context)} { }
-
+    explicit ProcessorInstance(ProcessorBase*, const PipelineContext*);
 
     void attachChildProcessor(ProcessorInstance* child_processor) {
         // Phase 1 restriction, only single downstream processor
@@ -58,6 +51,9 @@ public:
         return this->parent_processors;
     }
 
+    ProcessorBase* getProcessorBase() {
+        return processor.get();
+    }
 
     ~ProcessorInstance();
 

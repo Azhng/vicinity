@@ -27,10 +27,7 @@ class ProcessorContext {
 
 public:
 
-    explicit ProcessorContext(const ProcessorInstance* processor_instance, 
-            const PipelineContext* pipeline_context)
-        : processor_instance{processor_instance},
-          pipeline_context{pipeline_context} {}
+    explicit ProcessorContext(ProcessorInstance*, const PipelineContext*);
 
 
 };
