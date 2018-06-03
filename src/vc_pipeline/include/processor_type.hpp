@@ -3,7 +3,7 @@
 namespace vc {
     enum processor_type_t {
         Ingress,
-        Transforma,
+        Transform,
         Egress
     };
     

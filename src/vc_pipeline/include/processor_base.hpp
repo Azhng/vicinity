@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <boost/uuid/uuid.hpp>
+#include <boost/uuid/random_generator.hpp>
 #include "./processor_type.hpp"
 
 namespace vc {
@@ -10,6 +11,7 @@ namespace vc {
 using std::vector;
 using std::string;
 using boost::uuids::uuid;
+using boost::uuids::random_generator;
 
 class ProcessorContext;
 
@@ -28,7 +30,8 @@ class ProcessorBase {
 public:
 
     explicit ProcessorBase(ProcessorType processor_type)
-        : processor_type{processor_type} {}
+        : processor_base_uuid{random_generator()()},
+          processor_type{processor_type} {}
 
     void run(ProcessorContext* ctx) {
         processor_function(ctx);
@@ -51,7 +54,6 @@ protected:
     void define_inport(string port_name);
 
     void define_outport(string port_name);
-
 
 
     // Phase 2 API

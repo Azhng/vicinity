@@ -2,17 +2,20 @@
 
 #include <map>
 #include <string>
+#include <memory>
 #include <opencv2/opencv.hpp>
 #include <boost/uuid/uuid.hpp>
 #include "./pipeline_context.hpp"
-#include "./processor_instance.hpp"
 
 namespace vc {
 
 using cv::Mat;
 using std::map;
 using std::string;
+using std::unique_ptr;
 using boost::uuids::uuid;
+
+class ProcessorInstance;
 
 class ProcessorContext {
 
