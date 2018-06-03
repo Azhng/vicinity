@@ -44,13 +44,13 @@ void test_parent_child_flow_graph() {
     ProcessorInstance* ingress_ins = new ProcessorInstance(ingress, nullptr);
     ProcessorInstance* transform_ins = new ProcessorInstance(transform, nullptr);
 
-    ingress_ins->attachChildProcessor(transform_ins);
+    ingress_ins->attachChildProcessor(transform_ins, "inport", "outport");
 
     assert(ingress_ins->children().size() == 1);
-    assert(ingress_ins->children()[0] == transform_ins);
+    assert(get<0>(ingress_ins->children()[0]) == transform_ins);
 
     assert(transform_ins->parents().size() == 1);
-    assert(transform_ins->parents()[0] == ingress_ins);
+    assert(get<0>(transform_ins->parents()[0]) == ingress_ins);
 
     delete ingress_ins;
     delete transform_ins;

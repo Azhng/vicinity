@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <tuple>
 #include <boost/uuid/uuid.hpp>
 #include "./pipeline_context.hpp"
 #include "./processor_context.hpp"
@@ -13,6 +14,8 @@ using boost::uuids::uuid;
 using std::unique_ptr;
 using std::make_unique;
 using std::vector;
+using std::tuple;
+using std::make_tuple;
 
 
 class ProcessorBase;
@@ -29,27 +32,29 @@ class ProcessorInstance {
     unique_ptr<ProcessorContext> processor_context;
     const PipelineContext* pipeline_context;
 
-    vector<ProcessorInstance*> parent_processors;
-    vector<ProcessorInstance*> child_processors;
+    vector<tuple<ProcessorInstance*, string>> parent_connections;
+    vector<tuple<ProcessorInstance*, string>> child_connections;
 
 public:
 
     explicit ProcessorInstance(ProcessorBase*, const PipelineContext*);
 
-    void attachChildProcessor(ProcessorInstance* child_processor) {
+    void attachChildProcessor(ProcessorInstance* child_processor,
+            string child_port_name,
+            string parent_port_name) {
         // Phase 1 restriction, only single downstream processor
-        child_processors.push_back(child_processor);
-        child_processor->parent_processors.push_back(this);
+        child_connections.push_back(make_tuple(child_processor, child_port_name));
+        child_processor->parent_connections.push_back(make_tuple(this, parent_port_name));
     }
 
     void runProcessor();
 
-    const vector<ProcessorInstance*>& children() const {
-        return this->child_processors;
+    const vector<tuple<ProcessorInstance*, string>>& children() const {
+        return this->child_connections;
     }
 
-    const vector<ProcessorInstance*>& parents() const {
-        return this->parent_processors;
+    const vector<tuple<ProcessorInstance*, string>>& parents() const {
+        return this->parent_connections;
     }
 
     ProcessorBase* getProcessorBase() {

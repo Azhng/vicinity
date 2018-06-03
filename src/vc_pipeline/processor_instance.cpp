@@ -17,9 +17,16 @@ ProcessorInstance::ProcessorInstance(ProcessorBase* processor,
 
 
 void ProcessorInstance::runProcessor() {
-    // TODO: run processor stage
-    for (const ProcessorInstance* parent_context : parent_processors) {
+    // Phase 1 Implementation
 
+    // check if pipeline is being cancelled 
+    if (pipeline_context->getPipelineState() == (PipelineState::CANCELLED | PipelineState::ERROR)) {
+        return;
+    }
+
+    // check if the parent outport is correctly being filled
+    if (processor->getProcessorType() != ProcessorType::Ingress) {
+        ProcessorInstance* parent = get<0>(parent_connections[0]);
     }
 
 }
