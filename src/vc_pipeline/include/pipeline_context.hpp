@@ -22,6 +22,14 @@ public:
         pipeline_state = newState;
     }
 
+    const string& getLastErrorMessage() const {
+        return last_error_message;
+    }
+
+    void setLastErrorMessage(string message) {
+        last_error_message = message;
+    }
+
 };
 
 };

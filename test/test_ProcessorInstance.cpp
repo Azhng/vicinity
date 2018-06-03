@@ -47,10 +47,12 @@ void test_parent_child_flow_graph() {
     ingress_ins->attachChildProcessor(transform_ins, "inport", "outport");
 
     assert(ingress_ins->children().size() == 1);
-    assert(get<0>(ingress_ins->children()[0]) == transform_ins);
+    auto [child_ptr, dummy] = *ingress_ins->children().begin();
+    assert(child_ptr == transform_ins);
 
     assert(transform_ins->parents().size() == 1);
-    assert(get<0>(transform_ins->parents()[0]) == ingress_ins);
+    auto [parent_ptr, dummy2] = *transform_ins->parents().begin();
+    assert(parent_ptr == ingress_ins);
 
     delete ingress_ins;
     delete transform_ins;

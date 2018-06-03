@@ -30,30 +30,30 @@ class ProcessorInstance {
     uuid processor_instance_uuid;
     unique_ptr<ProcessorBase> processor;
     unique_ptr<ProcessorContext> processor_context;
-    const PipelineContext* pipeline_context;
+    PipelineContext* pipeline_context;
 
-    vector<tuple<ProcessorInstance*, string>> parent_connections;
-    vector<tuple<ProcessorInstance*, string>> child_connections;
+    map<ProcessorInstance*, vector<tuple<string, string>>> parent_connections;
+    map<ProcessorInstance*, vector<tuple<string, string>>> child_connections;
 
 public:
 
-    explicit ProcessorInstance(ProcessorBase*, const PipelineContext*);
+    explicit ProcessorInstance(ProcessorBase*, PipelineContext*);
 
     void attachChildProcessor(ProcessorInstance* child_processor,
             string child_port_name,
             string parent_port_name) {
         // Phase 1 restriction, only single downstream processor
-        child_connections.push_back(make_tuple(child_processor, child_port_name));
-        child_processor->parent_connections.push_back(make_tuple(this, parent_port_name));
+        child_connections[child_processor].push_back(make_tuple(parent_port_name, child_port_name));
+        child_processor->parent_connections[this].push_back(make_tuple(parent_port_name, child_port_name));
     }
 
     void runProcessor();
 
-    const vector<tuple<ProcessorInstance*, string>>& children() const {
+    const map<ProcessorInstance*, vector<tuple<string, string>>> children() const {
         return this->child_connections;
     }
 
-    const vector<tuple<ProcessorInstance*, string>>& parents() const {
+    const map<ProcessorInstance*, vector<tuple<string, string>>> parents() const {
         return this->parent_connections;
     }
 
