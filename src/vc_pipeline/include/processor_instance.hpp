@@ -18,6 +18,7 @@ using std::vector;
 
 
 class ProcessorBase;
+
 /**
  * ProcessorInstance: an abstraction of the instantiation of [[ProcessorBase]] 
  *    Containing weak references to the [[PipelineContext]] 
