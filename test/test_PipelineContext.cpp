@@ -15,8 +15,8 @@ void test_job_queue_submission() {
     ProcessorBase* ingress = new MockIngress();
     ProcessorBase* transform = new MockTransform();
 
-    ProcessorInstance* ingress_ins = new ProcessorInstance(ingress, nullptr);
-    ProcessorInstance* transform_ins = new ProcessorInstance(transform, nullptr);
+    ProcessorInstance* ingress_ins = new ProcessorInstance(ingress, &pipeline_context);
+    ProcessorInstance* transform_ins = new ProcessorInstance(transform, &pipeline_context);
 
     pipeline_context.submitJob(ingress_ins);
     pipeline_context.submitJob(transform_ins);

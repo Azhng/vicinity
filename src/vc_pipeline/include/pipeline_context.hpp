@@ -20,7 +20,9 @@ class PipelineContext {
 
 public: 
 
-    const PipelineState& getPipelineState() const {
+    explicit PipelineContext() : pipeline_state{PipelineState::IDLE} {}
+
+    PipelineState getPipelineState() const {
         return pipeline_state;
     }
 
@@ -34,6 +36,10 @@ public:
 
     void setLastErrorMessage(string message) {
         last_error_message = message;
+    }
+
+    size_t queueSize() const {
+        return job_queue.size();
     }
 
     void submitJob(ProcessorInstance* job) {

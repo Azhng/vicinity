@@ -1,11 +1,13 @@
 #pragma once
 
 namespace vc {
-enum class PipelineState {
+
+enum class ProcessorState {
+    QUEUED,
     RUNNING,
-    CANCELLED,
     ERROR,
     COMPLETED,
-    IDLE
+    EMPTY
 };
-};
+
+}

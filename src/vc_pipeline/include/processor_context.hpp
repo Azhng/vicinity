@@ -6,6 +6,7 @@
 #include <opencv2/opencv.hpp>
 #include <boost/uuid/uuid.hpp>
 #include "./pipeline_context.hpp"
+#include "./processor_state.hpp"
 
 namespace vc {
 
@@ -25,6 +26,8 @@ class ProcessorContext {
     map<string, unique_ptr<Mat>> inports;
     map<string, unique_ptr<Mat>> outports;
 
+    ProcessorState processor_state;
+
 public:
 
     explicit ProcessorContext(ProcessorInstance*, const PipelineContext*);
@@ -38,6 +41,14 @@ public:
     void toOutport(string, unique_ptr<Mat>);
 
     unique_ptr<Mat> fromOutport(string);
+
+    const ProcessorState& getProcessorState() const {
+        return processor_state;
+    }
+
+    void setProcessorState(ProcessorState state) {
+        processor_state = state;
+    }
 
     // Phase 2 API:
 

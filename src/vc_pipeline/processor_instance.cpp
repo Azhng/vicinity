@@ -15,7 +15,8 @@ ProcessorInstance::ProcessorInstance(ProcessorBase* processor,
                                      PipelineContext* pipeline_context)
     : processor_instance_uuid{random_generator()()},
            processor{std::unique_ptr<ProcessorBase>(processor)},
-           processor_context{make_unique<ProcessorContext>(this, pipeline_context)} { }
+           processor_context{make_unique<ProcessorContext>(this, pipeline_context)},
+           pipeline_context{pipeline_context} { }
 
 
 void ProcessorInstance::runProcessor() {
@@ -23,11 +24,14 @@ void ProcessorInstance::runProcessor() {
     // TODO: refactor this into middleware stack pattern
 
     // check if pipeline is being cancelled 
-    if (pipeline_context->getPipelineState() == (PipelineState::CANCELLED | PipelineState::ERROR)) {
+    // PipelineCancelMiddleware
+    PipelineState current_state = pipeline_context->getPipelineState();
+    if ((current_state == PipelineState::CANCELLED) || ( current_state == PipelineState::ERROR)) {
         return;
     }
 
     // check if the parent outport is correctly being filled
+    // FlowDataFetchingMiddleware
     if (processor->getProcessorType() != ProcessorType::Ingress) {
         auto [parent, port_connections] = *parent_connections.begin();
         string parent_port_name = get<0>(port_connections[0]);
@@ -35,26 +39,40 @@ void ProcessorInstance::runProcessor() {
 
 
         // if yes, move the data from parent port to current processor port
-        // else notify the pipeline that an error has occured 
+        // else we reschedule this processor to run again at later date
+        // TODO: implement timeout
         if (parent->getProcessorContext()->fromOutport(parent_port_name) == nullptr) {
-            pipeline_context->setPipelineState(PipelineState::ERROR);
-            pipeline_context->setLastErrorMessage("[ERROR]: Missing input data from previous pipeline processor at id(processor): " + to_string(processor_instance_uuid));
+            pipeline_context->submitJob(this);
             return;
-
         } else {
             unique_ptr<Mat> upstream_data = parent->getProcessorContext()->fromOutport(parent_port_name);
             processor_context->toInport(child_port_name, std::move(upstream_data));
         }
     }
 
-    try {
-        processor->run(processor_context.get());
 
+    // PostExecutionHookMiddleware
+    try {
+        processor_context->setProcessorState(ProcessorState::RUNNING);
+        processor->run(processor_context.get());
+        processor_context->setProcessorState(ProcessorState::COMPLETED);
+
+        // We only submit new job for non-Egress processors
         if (processor->getProcessorType() != ProcessorType::Egress) {
-            // TODO: figure job submission detail
+            auto [child, child_port_connection] = *child_connections.begin();
+            child->getProcessorContext()->setProcessorState(ProcessorState::QUEUED);
+            pipeline_context->submitJob(child);
+        } else {
+            // Since in phase 1 we only support single processor chain,
+            // it's impossible to have multiple fan-out egress
+            // hence we can assume if it is an egress, the pipeline is finished
+            // TODO: figure out how to handle fan-out egresses 
+
+            pipeline_context->setPipelineState(PipelineState::COMPLETED);
         }
     } catch (const std::runtime_error& e) {
        pipeline_context->setPipelineState(PipelineState::ERROR);
+       processor_context->setProcessorState(ProcessorState::ERROR);
        pipeline_context->setLastErrorMessage("[ERROR]: An error has occur during the pipeline execution with error message: " + string(e.what()));
     }
 

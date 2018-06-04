@@ -12,7 +12,8 @@ using namespace cv;
 vc::ProcessorContext::ProcessorContext(ProcessorInstance* processor_instance,
                                        const PipelineContext* pipeline_context)
         : processor_instance{processor_instance},
-          pipeline_context{pipeline_context} {
+          pipeline_context{pipeline_context},
+          processor_state{ProcessorState::EMPTY} {
     ProcessorBase* processor_base = processor_instance->getProcessorBase();
 
     const vector<string>& inport_names = processor_base->getInportNames();
