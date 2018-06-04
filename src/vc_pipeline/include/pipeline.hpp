@@ -17,6 +17,7 @@ using boost::asio::thread_pool;
 
 class Pipeline {
 
+    vector<uuid> roots;
     map<uuid, unique_ptr<ProcessorInstance>> processors;
     thread_pool worker_pool;
     unique_ptr<PipelineContext> pipeline_context;
@@ -31,11 +32,10 @@ public:
      */
     void attachProcessorChain(unique_ptr<ProcessorInstance>);
 
-
     /**
      * Attaching a single processor that is not connected to the current pipeline chain
      */
-    void attachProcessor(unique_ptr<ProcessorInstance>);
+    void attachProcessor(unique_ptr<ProcessorInstance>, bool is_root = false);
 
     PipelineContext* getPipelineContext() {
         return pipeline_context.get();
@@ -44,6 +44,12 @@ public:
     ProcessorInstance* getProcessorInstance(uuid id) {
         return processors[id].get();
     }
+
+    void runPipeline();
+
+private:
+
+    void _attach_processors(unique_ptr<ProcessorInstance>);
 
 };
 
