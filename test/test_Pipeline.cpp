@@ -19,10 +19,12 @@ void test_adding_processor_chain() {
     ProcessorBase* ingress = new MockIngress();
     ProcessorBase* transform = new MockTransform();
     ProcessorBase* egress = new MockEgress();
+    ProcessorBase* rogue = new MockTransform();
 
     ProcessorInstance* ingress_ins = new ProcessorInstance(ingress, pipeline_ctx);
     ProcessorInstance* transform_ins = new ProcessorInstance(transform, pipeline_ctx);
     ProcessorInstance* egress_ins = new ProcessorInstance(egress, pipeline_ctx);
+    ProcessorInstance* rogue_ins = new ProcessorInstance(rogue, pipeline_ctx);
 
     ingress_ins->attachChildProcessor(transform_ins,
             MockTransform::MockTransformInportName,
@@ -38,6 +40,9 @@ void test_adding_processor_chain() {
     assert(pipeline.getProcessorInstance(ingress_ins->getUUID()) == ingress_ins);
     assert(pipeline.getProcessorInstance(transform_ins->getUUID()) == transform_ins);
     assert(pipeline.getProcessorInstance(egress_ins->getUUID()) == egress_ins);
+
+    pipeline.attachProcessor(unique_ptr<ProcessorInstance>(rogue_ins));
+    assert(pipeline.getProcessorInstance(rogue_ins->getUUID()) == rogue_ins);
 }
 
 int main() {

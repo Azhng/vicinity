@@ -31,6 +31,12 @@ public:
      */
     void attachProcessorChain(unique_ptr<ProcessorInstance>);
 
+
+    /**
+     * Attaching a single processor that is not connected to the current pipeline chain
+     */
+    void attachProcessor(unique_ptr<ProcessorInstance>);
+
     PipelineContext* getPipelineContext() {
         return pipeline_context.get();
     }

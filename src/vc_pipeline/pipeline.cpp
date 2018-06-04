@@ -1,12 +1,7 @@
 #include "./include/pipeline.hpp"
 #include <boost/asio/thread_pool.hpp>
 #include <memory>
-#include <iostream>
 
-#include <boost/uuid/uuid_io.hpp>
-using boost::uuids::to_string;
-
-using namespace std;
 using namespace vc;
 
 using std::make_unique;
@@ -25,3 +20,6 @@ void Pipeline::attachProcessorChain(unique_ptr<ProcessorInstance> root) {
     processors[root->getUUID()] = std::move(root);
 }
 
+void Pipeline::attachProcessor(unique_ptr<ProcessorInstance> processor) {
+    processors[processor->getUUID()] = std::move(processor);
+}
