@@ -35,39 +35,42 @@ void Pipeline::attachProcessor(unique_ptr<ProcessorInstance> processor, bool is_
 void Pipeline::runPipeline() {
     // Phase 1 implementation 
     
-    // submit all roots processors into the thread pool
-    for (const uuid& processor_uuid : roots) {
-        ProcessorInstance* root = processors[processor_uuid].get();
-        pipeline_context->submitJob(root);
-    }
-
-    // update pipeline state
-    pipeline_context->setPipelineState(PipelineState::RUNNING);
-
-    // keep polling the job queue as long as the pipeline is in runnable state
-    // TODO: handle repeating Back-off restart state
-    while (_is_pipeline_still_in_runnable_state()) {
-        if (pipeline_context->queueSize() != 0) {
-            ProcessorInstance* next_job = pipeline_context->nextJob();
-            function<void()> runnable_job = [next_job] () -> void {
-                next_job->runProcessor();
-            };
-            post(worker_pool, runnable_job);
+    while (true) {
+        // submit all roots processors into the thread pool
+        for (const uuid& processor_uuid : roots) {
+            ProcessorInstance* root = processors[processor_uuid].get();
+            pipeline_context->submitJob(root);
         }
-    }
 
-    switch (pipeline_context->getPipelineState()) {
-        case PipelineState::CANCELLED:
-            // TODO: handle cancel
-            break;
-        case PipelineState::ERROR:
-            // TODO: handle error
-            break;
-        case PipelineState::COMPLETED:
-            // TODO: handle complete
-            break;
-        default:
-            throw std::runtime_error("[ERROR]: pipeline terminated with invalid state");
+        // update pipeline state
+        pipeline_context->setPipelineState(PipelineState::RUNNING);
+
+        // keep polling the job queue as long as the pipeline is in runnable state
+        // TODO: handle repeating Back-off restart state
+        while (_is_pipeline_still_in_runnable_state()) {
+
+            if (pipeline_context->queueSize() != 0) {
+                ProcessorInstance* next_job = pipeline_context->nextJob();
+                function<void()> runnable_job = [next_job] () -> void {
+                    next_job->runProcessor();
+                };
+                post(worker_pool, runnable_job);
+            }
+        }
+
+        switch (pipeline_context->getPipelineState()) {
+            case PipelineState::CANCELLED:
+                // TODO: handle cancel
+                break;
+            case PipelineState::ERROR:
+                // TODO: handle error
+                break;
+            case PipelineState::COMPLETED:
+                // TODO: handle completed
+                break;
+            default:
+                throw std::runtime_error("[ERROR]: pipeline terminated with invalid state");
+        }
     }
 }
 
