@@ -97,8 +97,45 @@ void test_processor_run_state_change() {
     delete pipeline_ctx;
 }
 
+class MockFaultyIngress : public ProcessorBase {
+
+public:
+
+
+    explicit MockFaultyIngress()
+        : ProcessorBase(ProcessorType::Ingress) {
+        define_outport(MockIngress::MockIngressOutportName);
+    }
+private:
+    void processor_function(ProcessorContext*) override { }
+};
+
+
+void test_faulty_processors() {
+    PipelineContext* pipeline_ctx = new PipelineContext();
+    ProcessorBase* ingress = new MockFaultyIngress();
+    ProcessorBase* transform = new MockTransform();
+    ProcessorInstance* ingress_ins = new ProcessorInstance(ingress, pipeline_ctx);
+    ProcessorInstance* transform_ins = new ProcessorInstance(transform, pipeline_ctx);
+
+    ingress_ins->attachChildProcessor(transform_ins,
+            MockTransform::MockTransformInportName,
+            MockIngress::MockIngressOutportName);
+
+    ingress_ins->runProcessor();
+    assert(ingress_ins->getProcessorContext()->getProcessorState() == ProcessorState::COMPLETED);
+    assert(transform_ins->getProcessorContext()->getProcessorState() == ProcessorState::QUEUED);
+    pipeline_ctx->nextJob()->runProcessor();
+    assert(transform_ins->getProcessorContext()->getProcessorState() == ProcessorState::BACK_OFF_RESTART);
+
+    delete ingress_ins;
+    delete transform_ins;
+    delete pipeline_ctx;
+}
+
 int main() {
     test_parent_child_flow_graph();
+    test_faulty_processors();
     test_processor_run_state_change();
 }
 

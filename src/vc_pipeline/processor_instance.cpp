@@ -43,6 +43,7 @@ void ProcessorInstance::runProcessor() {
         // TODO: implement timeout
         if (parent->getProcessorContext()->fromOutport(parent_port_name) == nullptr) {
             pipeline_context->submitJob(this);
+            processor_context->setProcessorState(ProcessorState::BACK_OFF_RESTART);
             return;
         } else {
             unique_ptr<Mat> upstream_data = parent->getProcessorContext()->fromOutport(parent_port_name);
@@ -58,7 +59,7 @@ void ProcessorInstance::runProcessor() {
         processor_context->setProcessorState(ProcessorState::COMPLETED);
 
         // We only submit new job for non-Egress processors
-        if (processor->getProcessorType() != ProcessorType::Egress) {
+        if (processor->getProcessorType() != ProcessorType::Egress && !child_connections.empty()) {
             auto [child, child_port_connection] = *child_connections.begin();
             child->getProcessorContext()->setProcessorState(ProcessorState::QUEUED);
             pipeline_context->submitJob(child);

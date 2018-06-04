@@ -7,7 +7,8 @@ enum class ProcessorState {
     RUNNING,
     ERROR,
     COMPLETED,
-    EMPTY
+    EMPTY,
+    BACK_OFF_RESTART
 };
 
 }
