@@ -71,7 +71,7 @@ void ProcessorInstance::runProcessor() {
 
             pipeline_context->setPipelineState(PipelineState::COMPLETED);
         }
-    } catch (const std::runtime_error& e) {
+    } catch (const std::exception& e) {
        pipeline_context->setPipelineState(PipelineState::ERROR);
        processor_context->setProcessorState(ProcessorState::ERROR);
        pipeline_context->setLastErrorMessage("[ERROR]: An error has occur during the pipeline execution with error message: " + string(e.what()));

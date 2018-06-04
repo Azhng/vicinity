@@ -133,9 +133,40 @@ void test_faulty_processors() {
     delete pipeline_ctx;
 }
 
+class MockExceptionIngress : public ProcessorBase {
+public:
+
+    explicit MockExceptionIngress()
+        : ProcessorBase(ProcessorType::Ingress) {
+        define_outport(MockIngress::MockIngressOutportName);
+    }
+private:
+    void processor_function(ProcessorContext*) override {
+        throw std::runtime_error("testing exception");
+    }
+};
+
+
+void test_exception_handling() {
+    PipelineContext* pipeline_ctx = new PipelineContext();
+    ProcessorBase* ingress = new MockExceptionIngress();
+    ProcessorInstance* ingress_ins = new ProcessorInstance(ingress, pipeline_ctx);
+
+
+    ingress_ins->runProcessor();
+    assert(ingress_ins->getProcessorContext()->getProcessorState() == ProcessorState::ERROR);
+    assert(pipeline_ctx->getLastErrorMessage() == "[ERROR]: An error has occur during the pipeline execution with error message: testing exception");
+
+
+    delete ingress_ins;
+    delete pipeline_ctx;
+
+}
+
 int main() {
     test_parent_child_flow_graph();
     test_faulty_processors();
     test_processor_run_state_change();
+    test_exception_handling();
 }
 
