@@ -14,7 +14,7 @@ Going distributed
 
 ## Build
 
-This project was developed against OpenCV 4.0 and Boost 1.67. Get your dependency working pls.
+This project was developed against C++17, OpenCV 4.0 and Boost 1.67.
 
 ``` bash
 cd /path/to/viciniy
