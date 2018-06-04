@@ -4,7 +4,6 @@
 #include <vector>
 #include <tuple>
 #include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_io.hpp>
 #include "./pipeline_context.hpp"
 #include "./processor_context.hpp"
 #include "./processor_base.hpp"
@@ -12,7 +11,6 @@
 namespace vc {
 
 using boost::uuids::uuid;
-using boost::uuids::to_string;
 using std::unique_ptr;
 using std::make_unique;
 using std::vector;
@@ -67,8 +65,8 @@ public:
         return processor_context.get();
     }
 
-    string getUUID() const {
-        return to_string(processor_instance_uuid);
+    uuid getUUID() const {
+        return processor_instance_uuid;
     }
 
     ~ProcessorInstance();

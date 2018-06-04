@@ -15,7 +15,6 @@ class PipelineContext {
 
     PipelineState pipeline_state;
     string last_error_message;
-
     queue<ProcessorInstance*> job_queue;
 
 public: 

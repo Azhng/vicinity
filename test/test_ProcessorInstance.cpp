@@ -51,8 +51,7 @@ void test_processor_run_state_change() {
 
     transform_ins->attachChildProcessor(egress_ins,
             MockEgress::MockEgressInportName,
-            MockTransform::MockTransformOutportName
-            );
+            MockTransform::MockTransformOutportName);
 
 
     // Checking initial state
