@@ -21,6 +21,7 @@ public:
     }
 private:
     void processor_function(ProcessorContext* ctx) override {
+        cout << "entering mock ingress" << endl;
         unique_ptr<Mat> input_mat = make_unique<Mat>(2, 2, CV_8UC3, Scalar(1, 2, 3));
         ctx->toOutport(MockIngressOutportName, std::move(input_mat));
     }
@@ -42,6 +43,7 @@ public:
     }
 private:
     void processor_function(ProcessorContext* ctx) override {
+        cout << "entering mock transform" << endl;
         unique_ptr<Mat> input_mat = make_unique<Mat>(2, 2, CV_8UC3, Scalar(3, 2, 3));
         ctx->toOutport(MockTransformOutportName, std::move(input_mat));
     }
@@ -62,7 +64,9 @@ public:
         define_inport(MockEgressInportName);
     }
 private:
-    void processor_function(ProcessorContext*) override { }
+    void processor_function(ProcessorContext*) override {
+        cout << "entering mock egress" << endl;
+    }
 };
 
 const string MockEgress::MockEgressInportName = "inport";

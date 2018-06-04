@@ -51,6 +51,8 @@ private:
 
     void _attach_processors(unique_ptr<ProcessorInstance>);
 
+    bool _is_pipeline_still_in_runnable_state();
+
 };
 
 };
