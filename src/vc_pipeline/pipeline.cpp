@@ -32,6 +32,9 @@ void Pipeline::attachProcessor(unique_ptr<ProcessorInstance> processor, bool is_
     processors[processor->getUUID()] = std::move(processor);
 }
 
+
+// TODO: refactor the main code into helper function that run pipeline once
+//       so we can write more thorough test
 void Pipeline::runPipeline() {
     // Phase 1 implementation 
     

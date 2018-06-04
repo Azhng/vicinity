@@ -1,13 +1,17 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <queue>
+#include <boost/any.hpp>
 #include "./pipeline_state.hpp"
 
 namespace vc {
 
+using std::map;
 using std::string;
 using std::queue;
+using boost::any;
 
 class ProcessorInstance;
 
@@ -16,6 +20,7 @@ class PipelineContext {
     PipelineState pipeline_state;
     string last_error_message;
     queue<ProcessorInstance*> job_queue;
+    map<string, any> pipeline_cache;
 
 public: 
 
@@ -41,16 +46,9 @@ public:
         return job_queue.size();
     }
 
-    void submitJob(ProcessorInstance* job) {
-        job_queue.push(job);
-    }
+    void submitJob(ProcessorInstance* job);
 
-    ProcessorInstance* nextJob() {
-        ProcessorInstance* next_job = job_queue.front();
-        job_queue.pop();
-        return next_job;
-    }
-
+    ProcessorInstance* nextJob();
 };
 
 };
