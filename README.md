@@ -21,8 +21,8 @@ cd /path/to/viciniy
 mkdir build/
 cd build
 
-
-cmake -DRELEASE=OFF -DBUILD_TEST=ON ..
+# change the flags based on your needs
+cmake -DRELEASE=OFF -DBUILD_TEST=ON -DBUILD_EXAMPLE=ON ..
 make -j4
 
 # to run test 
