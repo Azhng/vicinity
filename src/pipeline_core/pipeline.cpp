@@ -61,8 +61,7 @@ void Pipeline::runPipelineOnce() {
 
         if (pipeline_context->queueSize() != 0) {
             ProcessorInstance* next_job = pipeline_context->nextJob();
-//            if (next_job->runOnUIThread()) {
-            if (true) {
+            if (next_job->runOnUIThread()) {
                 next_job->runProcessor();
             } else {
                 function<void()> runnable_job = [next_job] () -> void {
