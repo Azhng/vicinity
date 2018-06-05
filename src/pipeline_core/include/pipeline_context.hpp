@@ -15,6 +15,7 @@ using std::map;
 using std::string;
 using std::queue;
 using std::unique_ptr;
+using std::atomic;
 using std::make_unique;
 using boost::any;
 using boost::any_cast;
@@ -26,14 +27,14 @@ class PipelineSignal;
 class PipelineContext {
 
     PipelineState pipeline_state;
-    PipelineSignal* pipeline_signal = nullptr;
+    atomic<PipelineSignal*> pipeline_signal;
     string last_error_message;
     queue<ProcessorInstance*> job_queue;
     map<string, unique_ptr<any>> pipeline_cache;
 
 public: 
 
-    explicit PipelineContext() : pipeline_state{PipelineState::IDLE} {}
+    explicit PipelineContext();
 
     PipelineState getPipelineState() const {
         return pipeline_state;

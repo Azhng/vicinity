@@ -1,8 +1,14 @@
 #include "./include/pipeline_context.hpp"
 #include "./include/pipeline_signal.hpp"
+#include <memory>
+
+using std::atomic;
 
 using namespace vc;
 
+core::PipelineContext::PipelineContext()
+    : pipeline_state{PipelineState::IDLE},
+      pipeline_signal{nullptr} {}
 
 void core::PipelineContext::submitJob(ProcessorInstance* job) {
     job_queue.push(job);
@@ -15,8 +21,9 @@ core::ProcessorInstance* core::PipelineContext::nextJob() {
 }
 
 core::PipelineContext::~PipelineContext() {
-    if (pipeline_signal != nullptr) {
-        delete pipeline_signal;
-        pipeline_signal = nullptr;
+    PipelineSignal* signal = pipeline_signal.load();
+    if (signal != nullptr) {
+        delete signal;
+        signal = nullptr;
     }
 }
