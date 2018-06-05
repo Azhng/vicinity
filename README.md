@@ -1,14 +1,14 @@
 # Vicinity - Distributed Real-Time image processing pipeline
 
-Currently WIP
+Design doc: https://docs.google.com/document/d/1QZ93JeKcHi5c9KIWQmusRuJG1kim8K3v0Ucr8kU5ZUc/edit?usp=sharing
 
-## Phase 1:
+## Phase 1 [x]:
 Finalize pipeline API
 
-## Phase 2:
+## Phase 2 [WIP]:
 Using type system to verify pipeline correctness at compile time
 
-## Phase 3:
+## Phase 3 [Spiking]:
 Going distributed
 
 
