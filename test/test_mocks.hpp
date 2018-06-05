@@ -4,11 +4,29 @@
 #include <opencv2/opencv.hpp>
 #include "../src/pipeline_core/include/processor_base.hpp"
 #include "../src/pipeline_core/include/processor_context.hpp"
+#include "../src/pipeline_core/include/pipeline_signal.hpp"
 
 using namespace vc;
 using namespace vc::core;
 using namespace cv;
 using namespace std;
+
+class MockSignal : public PipelineSignal {
+
+public:
+
+    int* i;
+
+    MockSignal(int* val) : i{val} {}
+
+private:
+
+    // create side effect so the execution is visible from outside
+    void _process_singal() override {
+        (*i) += 1;
+    }
+
+};
 
 class MockIngress : public ProcessorBase {
 

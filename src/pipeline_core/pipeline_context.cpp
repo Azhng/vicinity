@@ -3,6 +3,8 @@
 #include <memory>
 
 using std::atomic;
+using std::memory_order_release;
+using std::memory_order_acquire;
 
 using namespace vc;
 
@@ -18,6 +20,15 @@ core::ProcessorInstance* core::PipelineContext::nextJob() {
     ProcessorInstance* next_job = job_queue.front();
     job_queue.pop();
     return next_job;
+}
+
+void core::PipelineContext::sendSignal(PipelineSignal* signal) {
+    pipeline_signal.store(signal, memory_order_release);
+}
+
+core::PipelineSignal* core::PipelineContext::getSignal() const {
+    PipelineSignal* signal = pipeline_signal.load(memory_order_acquire);
+    return signal;
 }
 
 core::PipelineContext::~PipelineContext() {

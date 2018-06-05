@@ -58,6 +58,10 @@ public:
 
     void submitJob(ProcessorInstance* job);
 
+    void sendSignal(PipelineSignal*);
+
+    PipelineSignal* getSignal() const;
+
     ProcessorInstance* nextJob();
 
     // TODO: add locking

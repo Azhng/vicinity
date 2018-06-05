@@ -13,6 +13,45 @@ using namespace vc;
 using namespace vc::core;
 using namespace std;
 
+void test_signal_processing() {
+    int test_val = 0;
+    MockSignal m(&test_val);
+
+    Pipeline pipeline(4);
+    PipelineContext* pipeline_ctx = pipeline.getPipelineContext();
+
+    ProcessorBase* ingress = new MockIngress();
+    ProcessorBase* transform = new MockTransform();
+    ProcessorBase* egress = new MockEgress();
+
+    ProcessorInstance* ingress_ins = new ProcessorInstance(ingress, pipeline_ctx);
+    ProcessorInstance* transform_ins = new ProcessorInstance(transform, pipeline_ctx);
+    ProcessorInstance* egress_ins = new ProcessorInstance(egress, pipeline_ctx);
+
+    ingress_ins->attachChildProcessor(transform_ins,
+            MockTransform::MockTransformInportName,
+            MockIngress::MockIngressOutportName);
+
+    transform_ins->attachChildProcessor(egress_ins,
+            MockEgress::MockEgressInportName,
+            MockTransform::MockTransformOutportName);
+
+    pipeline.attachProcessorChain(unique_ptr<ProcessorInstance>(ingress_ins));
+    pipeline.runPipelineOnce();
+
+    assert(test_val == 0);
+
+    pipeline_ctx->sendSignal(&m);
+    pipeline.runPipelineOnce();
+
+    // check if signal handling code is being used
+    assert(test_val == 1);
+
+    // check if signal is being cleared
+    pipeline.runPipelineOnce();
+    assert(test_val == 1);
+}
+
 void test_running_pipeline() {
     Pipeline pipeline(4);
     PipelineContext* pipeline_ctx = pipeline.getPipelineContext();
@@ -73,4 +112,5 @@ void test_adding_processor_chain() {
 int main() {
     test_adding_processor_chain();
     test_running_pipeline();
+    test_signal_processing();
 }

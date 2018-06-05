@@ -1,5 +1,6 @@
 #include "./include/pipeline.hpp"
 #include "./include/utils.hpp"
+#include "./include/pipeline_signal.hpp"
 #include <boost/asio/thread_pool.hpp>
 #include <boost/asio/post.hpp>
 #include <boost/uuid/uuid.hpp>
@@ -37,6 +38,9 @@ void Pipeline::attachProcessor(unique_ptr<ProcessorInstance> processor, bool is_
 
 
 void Pipeline::runPipelineOnce() {
+
+    _check_for_signal();
+
     // submit all roots processors into the thread pool
     for (const uuid& processor_uuid : roots) {
         ProcessorInstance* root = processors[processor_uuid].get();
@@ -80,11 +84,20 @@ void Pipeline::runPipelineOnce() {
 
 }
 
+void Pipeline::_check_for_signal() {
+    PipelineSignal* signal = pipeline_context->getSignal();
+    if (signal != nullptr) {
+        signal->signalHandler();
+        pipeline_context->sendSignal(nullptr); // clear the signal
+    }
+}
+
 // TODO: refactor the main code into helper function that run pipeline once
 //       so we can write more thorough test
 void Pipeline::runPipeline() {
     // Phase 1 implementation 
     
+    // TODO: verify for race condition in pipelined-execution mode
     while (true) {
         runPipelineOnce();
     }

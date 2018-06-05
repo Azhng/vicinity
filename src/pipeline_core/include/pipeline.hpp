@@ -57,6 +57,8 @@ private:
 
     bool _is_pipeline_still_in_runnable_state();
 
+    void _check_for_signal();
+
 };
 
 };
