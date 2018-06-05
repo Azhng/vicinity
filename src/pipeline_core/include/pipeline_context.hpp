@@ -21,9 +21,12 @@ using boost::any_cast;
 
 class ProcessorInstance;
 
+class PipelineSignal;
+
 class PipelineContext {
 
     PipelineState pipeline_state;
+    PipelineSignal* pipeline_signal = nullptr;
     string last_error_message;
     queue<ProcessorInstance*> job_queue;
     map<string, unique_ptr<any>> pipeline_cache;
@@ -62,6 +65,8 @@ public:
 
     template <typename T>
     T* retrieve(string);
+
+    ~PipelineContext();
 
 };
 

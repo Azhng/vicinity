@@ -4,7 +4,13 @@ namespace vc {
 
 namespace core {
 
-class PipelineSignal {};
+class PipelineSignal {
+
+public:
+
+    virtual ~PipelineSignal() {}
+
+};
 
 };
 
