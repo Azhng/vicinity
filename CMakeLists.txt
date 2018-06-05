@@ -13,6 +13,7 @@ set (CMAKE_CXX_FLAGS "--std=c++17 -I/usr/local/include/opencv2 ${CMAKE_CXX_FLAGS
 
 option(RELEASE "Build with optimize flag" OFF)
 option(BUILD_TEST "Building unit tests" OFF)
+option(BUILD_EXAMPLE "Building examples" OFF)
 message(STATUS "Building Release version: ${RELEASE}")
 message(STATUS "Building unit tests: ${BUILD_TEST}")
 
@@ -29,3 +30,7 @@ if(BUILD_TEST)
 	subdirs(test)
 endif()
 
+if(BUILD_EXAMPLE)
+    message(STATUS "Building Examples")
+    subdirs(example)
+endif()

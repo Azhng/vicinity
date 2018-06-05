@@ -1,10 +1,12 @@
 #include <string>
 #include <memory>
+#include <iostream>
 #include "./video_fetcher.hpp"
-#include "../../pipeline_core/include/processor_type.hpp"
-#include "../../pipeline_core/include/processor_context.hpp"
+#include "../../pipeline_core/include/vicinity.hpp"
 
+using namespace std;
 using namespace vc;
+
 using std::string;
 using std::unique_ptr;
 using std::make_unique;

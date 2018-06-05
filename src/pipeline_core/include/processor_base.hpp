@@ -26,12 +26,14 @@ class ProcessorBase {
     const ProcessorType processor_type;
     vector<string> inports;
     vector<string> outports;
+    bool ui_thread; // to handle OpenCV UI lib shanigens
 
 public:
 
-    explicit ProcessorBase(ProcessorType processor_type)
+    explicit ProcessorBase(ProcessorType processor_type, bool _ui_thread = false)
         : processor_base_uuid{random_generator()()},
-          processor_type{processor_type} {}
+          processor_type{processor_type},
+          ui_thread{_ui_thread} {}
 
     void run(ProcessorContext* ctx) {
         processor_function(ctx);
@@ -47,6 +49,10 @@ public:
 
     const vector<string>& getOutportNames() const {
         return outports;
+    }
+
+    bool runOnUIThread() const {
+        return ui_thread;
     }
 
     virtual ~ProcessorBase() {}

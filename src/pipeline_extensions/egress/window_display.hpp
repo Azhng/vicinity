@@ -7,15 +7,15 @@ namespace vc {
 
 using std::string;
 
-class WindowOutput : public ProcessorBase {
+class WindowDisplay : public ProcessorBase {
 
     string window_name;
 
 public:
 
-    static const string WINDOW_INPUT_OUTPORT;
+    static const string WINDOW_DISPLAY_INPORT;
 
-    explicit WindowOutput(string);
+    explicit WindowDisplay(string);
 
 private:
 

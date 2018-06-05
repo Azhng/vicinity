@@ -6,6 +6,8 @@
 #include <memory>
 #include <functional>
 
+#include <opencv2/opencv.hpp>
+
 using namespace vc;
 
 using std::function;
@@ -49,10 +51,15 @@ void Pipeline::runPipelineOnce() {
 
         if (pipeline_context->queueSize() != 0) {
             ProcessorInstance* next_job = pipeline_context->nextJob();
-            function<void()> runnable_job = [next_job] () -> void {
+            //if (next_job->runOnUIThread()) {
+            if (next_job->runOnUIThread()) {
                 next_job->runProcessor();
-            };
-            post(worker_pool, runnable_job);
+            } else {
+                function<void()> runnable_job = [next_job] () -> void {
+                    next_job->runProcessor();
+                };
+                post(worker_pool, runnable_job);
+            }
         }
     }
 

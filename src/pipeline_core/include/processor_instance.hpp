@@ -65,6 +65,10 @@ public:
         return processor_instance_uuid;
     }
 
+    bool runOnUIThread() const {
+        return processor->runOnUIThread();
+    }
+
     ~ProcessorInstance();
 
 };

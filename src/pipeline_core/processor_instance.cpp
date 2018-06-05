@@ -6,8 +6,8 @@
 #include "./include/processor_instance.hpp"
 #include "./include/pipeline_context.hpp"
 
-using namespace std;
 using namespace vc;
+using std::get;
 using boost::uuids::random_generator;
 using boost::uuids::to_string;
 
@@ -53,12 +53,12 @@ void ProcessorInstance::runProcessor() {
         // if yes, move the data from parent port to current processor port
         // else we reschedule this processor to run again at later date
         // TODO: implement timeout
-        if (parent->getProcessorContext()->fromOutport(parent_port_name) == nullptr) {
+        unique_ptr<Mat> upstream_data = parent->getProcessorContext()->fromOutport(parent_port_name);
+        if (upstream_data == nullptr) {
             pipeline_context->submitJob(this);
             processor_context->setProcessorState(ProcessorState::BACK_OFF_RESTART);
             return;
         } else {
-            unique_ptr<Mat> upstream_data = parent->getProcessorContext()->fromOutport(parent_port_name);
             processor_context->toInport(child_port_name, std::move(upstream_data));
         }
     }
