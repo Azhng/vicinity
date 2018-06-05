@@ -47,6 +47,8 @@ public:
 
     void runPipeline();
 
+    void runPipelineOnce();
+
 private:
 
     void _attach_processors(unique_ptr<ProcessorInstance>);

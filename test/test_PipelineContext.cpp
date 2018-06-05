@@ -1,5 +1,6 @@
 #include <cassert>
 #include <string>
+#include <memory>
 #include <opencv2/opencv.hpp>
 #include "../src/vc_pipeline/include/processor_type.hpp"
 #include "../src/vc_pipeline/include/processor_base.hpp" 
@@ -8,6 +9,7 @@
 #include "./test_mocks.hpp"
 
 using namespace vc;
+using namespace std;
 
 
 void test_job_queue_submission() {
@@ -25,6 +27,23 @@ void test_job_queue_submission() {
     assert(pipeline_context.nextJob() == transform_ins);
 }
 
+void test_pipeline_wide_cache() {
+    PipelineContext pipeline_context =  PipelineContext();
+    unique_ptr<int> i = make_unique<int>(1);
+    unique_ptr<char> j = make_unique<char>('a');
+    unique_ptr<double> k = make_unique<double>(9.0233);
+
+    pipeline_context.store<int>("i", std::move(i));
+    pipeline_context.store<char>("j", std::move(j));
+    pipeline_context.store<double>("k", std::move(k));
+
+    assert(*pipeline_context.retrieve<int>("i") == 1);
+    assert(*pipeline_context.retrieve<char>("j") == 'a');
+    assert(*pipeline_context.retrieve<double>("k") == 9.0233);
+
+}
+
 int main() {
     test_job_queue_submission();
+    test_pipeline_wide_cache();
 }

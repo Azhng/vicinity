@@ -33,7 +33,7 @@ void test_running_pipeline() {
             MockTransform::MockTransformOutportName);
 
     pipeline.attachProcessorChain(unique_ptr<ProcessorInstance>(ingress_ins));
-    pipeline.runPipeline();
+    pipeline.runPipelineOnce();
 }
 
 void test_adding_processor_chain() {
