@@ -10,6 +10,8 @@
 
 namespace vc {
 
+namespace core {
+
 using boost::uuids::uuid;
 using std::unique_ptr;
 using std::make_unique;
@@ -73,4 +75,5 @@ public:
 
 };
 
+};
 };

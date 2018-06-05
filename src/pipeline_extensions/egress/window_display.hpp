@@ -3,7 +3,11 @@
 #include <opencv2/opencv.hpp>
 #include "../../pipeline_core/include/processor_base.hpp"
 
+using namespace vc::core;
+
 namespace vc {
+
+namespace extensions {
 
 using std::string;
 
@@ -22,6 +26,8 @@ private:
     void processor_function(ProcessorContext*) override;
 
 };
+
+}
 
 };
 

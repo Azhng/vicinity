@@ -10,6 +10,8 @@
 
 namespace vc {
 
+namespace core {
+
 using cv::Mat;
 using std::map;
 using std::string;
@@ -64,6 +66,8 @@ public:
     //template <typename T>
     //unique_ptr<T> fromOutport(string);
 
+
+};
 
 };
 

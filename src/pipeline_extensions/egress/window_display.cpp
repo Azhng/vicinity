@@ -4,6 +4,8 @@
 #include "../../pipeline_core/include/processor_context.hpp"
 
 using namespace vc;
+using namespace vc::core;
+using namespace vc::extensions;
 
 using cv::Mat;
 using cv::namedWindow;

@@ -11,14 +11,14 @@ using std::get;
 using boost::uuids::random_generator;
 using boost::uuids::to_string;
 
-ProcessorInstance::ProcessorInstance(ProcessorBase* processor,
+core::ProcessorInstance::ProcessorInstance(ProcessorBase* processor,
                                      PipelineContext* pipeline_context)
     : processor_instance_uuid{random_generator()()},
            processor{std::unique_ptr<ProcessorBase>(processor)},
-           processor_context{make_unique<ProcessorContext>(this, pipeline_context)},
+           processor_context{make_unique<core::ProcessorContext>(this, pipeline_context)},
            pipeline_context{pipeline_context} { }
 
-void ProcessorInstance::attachChildProcessor(ProcessorInstance* child_processor,
+void core::ProcessorInstance::attachChildProcessor(ProcessorInstance* child_processor,
         string child_port_name,
             string parent_port_name) {
         // Phase 1 restriction, only single downstream processor
@@ -26,25 +26,25 @@ void ProcessorInstance::attachChildProcessor(ProcessorInstance* child_processor,
     child_processor->parent_connections[this].push_back(make_tuple(parent_port_name, child_port_name));
 }
 
-void ProcessorInstance::removeChildProcessor(ProcessorInstance* child_processor) {
+void core::ProcessorInstance::removeChildProcessor(ProcessorInstance* child_processor) {
     child_processor->parent_connections.erase(this);
     child_connections.erase(child_processor);
 }
 
-void ProcessorInstance::runProcessor() {
+void core::ProcessorInstance::runProcessor() {
     // Phase 1 Implementation
     // TODO: refactor this into middleware stack pattern
 
     // check if pipeline is being cancelled 
     // PipelineCancelMiddleware
-    PipelineState current_state = pipeline_context->getPipelineState();
-    if ((current_state == PipelineState::CANCELLED) || ( current_state == PipelineState::ERROR)) {
+    core::PipelineState current_state = pipeline_context->getPipelineState();
+    if ((current_state == core::PipelineState::CANCELLED) || ( current_state == core::PipelineState::ERROR)) {
         return;
     }
 
     // check if the parent outport is correctly being filled
     // FlowDataFetchingMiddleware
-    if (processor->getProcessorType() != ProcessorType::Ingress) {
+    if (processor->getProcessorType() != core::ProcessorType::Ingress) {
         auto [parent, port_connections] = *parent_connections.begin();
         string parent_port_name = get<0>(port_connections[0]);
         string child_port_name = get<1>(port_connections[0]);
@@ -91,4 +91,4 @@ void ProcessorInstance::runProcessor() {
 
 }
 
-ProcessorInstance::~ProcessorInstance() {}
+core::ProcessorInstance::~ProcessorInstance() {}

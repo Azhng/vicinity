@@ -3,11 +3,11 @@
 using namespace vc;
 
 
-void vc::PipelineContext::submitJob(ProcessorInstance* job) {
+void core::PipelineContext::submitJob(ProcessorInstance* job) {
     job_queue.push(job);
 }
 
-ProcessorInstance* vc::PipelineContext::nextJob() {
+core::ProcessorInstance* core::PipelineContext::nextJob() {
     ProcessorInstance* next_job = job_queue.front();
     job_queue.pop();
     return next_job;

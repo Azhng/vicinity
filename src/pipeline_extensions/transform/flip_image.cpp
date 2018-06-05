@@ -3,6 +3,8 @@
 #include "../../pipeline_core/include/processor_type.hpp"
 
 using namespace vc;
+using namespace vc::core;
+using namespace vc::extensions;
 
 const string FlipImage::FLIP_IMAGE_INPORT = "FLIP_IMAGE_INPORT";
 const string FlipImage::FLIP_IMAGE_OUTPORT = "FLIP_IMAGE_OUTPORT";

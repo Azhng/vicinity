@@ -5,6 +5,7 @@
 #include "../src/pipeline_core/include/processor_context.hpp"
 
 using namespace vc;
+using namespace vc::core;
 using namespace std;
 
 

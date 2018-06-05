@@ -9,6 +9,8 @@
 
 namespace vc {
 
+namespace core {
+
 using std::map;
 using std::string;
 using std::queue;
@@ -74,5 +76,7 @@ template <typename T>
 T* PipelineContext::retrieve(string key) {
     return any_cast<T*>(*pipeline_cache[key]);
 }
+
+};
 
 };

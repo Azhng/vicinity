@@ -10,6 +10,8 @@
 
 namespace vc {
 
+namespace core {
+
 using std::map;
 using std::unique_ptr;
 using boost::uuids::uuid;
@@ -57,4 +59,5 @@ private:
 
 };
 
+};
 };

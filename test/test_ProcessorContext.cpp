@@ -6,6 +6,7 @@
 #include "../src/pipeline_core/include/processor_instance.hpp"
 
 using namespace vc;
+using namespace vc::core;
 using namespace std;
 
 using cv::Mat;

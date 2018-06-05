@@ -9,6 +9,7 @@
 #include <opencv2/opencv.hpp>
 
 using namespace vc;
+using namespace vc::core;
 
 using std::function;
 using std::make_unique;
@@ -18,7 +19,7 @@ using boost::asio::thread_pool;
 
 Pipeline::Pipeline(size_t num_of_threads)
     : worker_pool{num_of_threads},
-      pipeline_context(make_unique<PipelineContext>()) { }
+      pipeline_context(make_unique<core::PipelineContext>()) { }
 
 
 void Pipeline::attachProcessorChain(unique_ptr<ProcessorInstance> root) {

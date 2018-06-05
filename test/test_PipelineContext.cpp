@@ -9,6 +9,7 @@
 #include "./test_mocks.hpp"
 
 using namespace vc;
+using namespace vc::core;
 using namespace std;
 
 

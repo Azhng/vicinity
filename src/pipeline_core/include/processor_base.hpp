@@ -8,6 +8,8 @@
 
 namespace vc {
 
+namespace core {
+
 using std::vector;
 using std::string;
 using boost::uuids::uuid;
@@ -87,6 +89,8 @@ protected:
      * void define_outport(string port_name);
      *
      */
+
+};
 
 };
 

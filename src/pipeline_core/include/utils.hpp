@@ -6,6 +6,8 @@ using std::string;
 
 namespace vc {
 
+namespace core {
+
     string pipeline_state_to_string(const PipelineState& state) {
         switch(state) {
             case PipelineState::CANCELLED:
@@ -20,5 +22,7 @@ namespace vc {
                 return "RUNNING";
         }
     }
+
+}
 
 };

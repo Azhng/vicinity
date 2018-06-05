@@ -2,8 +2,9 @@
 #include <iostream>
 
 using namespace std;
+using namespace vc;
 
-void vc::ProcessorBase::define_inport(string port_name) {
+void core::ProcessorBase::define_inport(string port_name) {
         if(inports.size() == 0 && processor_type != ProcessorType::Ingress) {
             inports.push_back(port_name);
         } else {
@@ -16,7 +17,7 @@ void vc::ProcessorBase::define_inport(string port_name) {
 }
 
 
-void vc::ProcessorBase::define_outport(string port_name) {
+void core::ProcessorBase::define_outport(string port_name) {
         if(outports.size() == 0 && processor_type != ProcessorType::Egress) {
             outports.push_back(port_name);
         } else {

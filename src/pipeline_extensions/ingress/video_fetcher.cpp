@@ -6,6 +6,8 @@
 
 using namespace std;
 using namespace vc;
+using namespace vc::core;
+using namespace vc::extensions;
 
 using std::string;
 using std::unique_ptr;

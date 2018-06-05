@@ -6,6 +6,8 @@
 
 using std::unique_ptr;
 using namespace vc;
+using namespace vc::core;
+using namespace vc::extensions;
 
 
 int main() {
