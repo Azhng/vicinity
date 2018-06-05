@@ -2,10 +2,10 @@
 #include <string>
 #include <memory>
 #include <opencv2/opencv.hpp>
-#include "../src/vc_pipeline/include/processor_type.hpp"
-#include "../src/vc_pipeline/include/processor_base.hpp" 
-#include "../src/vc_pipeline/include/processor_instance.hpp"
-#include "../src/vc_pipeline/include/pipeline_context.hpp"
+#include "../src/pipeline_core/include/processor_type.hpp"
+#include "../src/pipeline_core/include/processor_base.hpp" 
+#include "../src/pipeline_core/include/processor_instance.hpp"
+#include "../src/pipeline_core/include/pipeline_context.hpp"
 #include "./test_mocks.hpp"
 
 using namespace vc;

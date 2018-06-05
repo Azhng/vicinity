@@ -1,8 +1,8 @@
 #include <cassert>
 #include <string>
-#include "../src/vc_pipeline/include/processor_type.hpp"
-#include "../src/vc_pipeline/include/processor_base.hpp" 
-#include "../src/vc_pipeline/include/processor_context.hpp"
+#include "../src/pipeline_core/include/processor_type.hpp"
+#include "../src/pipeline_core/include/processor_base.hpp" 
+#include "../src/pipeline_core/include/processor_context.hpp"
 
 using namespace vc;
 using namespace std;

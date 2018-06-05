@@ -1,4 +1,4 @@
-file(GLOB v_src vc_pipeline/*.cpp)
+file(GLOB v_src pipeline_core/*.cpp)
 
 add_library(viclib STATIC ${v_src})
 
