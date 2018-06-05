@@ -1,7 +1,7 @@
-#include "../src/pipeline_core/include/vicinity.hpp"
-#include "../src/pipeline_extensions/ingress/video_fetcher.hpp"
-#include "../src/pipeline_extensions/egress/window_display.hpp"
-#include "../src/pipeline_extensions/transform/flip_image.hpp"
+#include "../../src/pipeline_core/include/vicinity.hpp"
+#include "../../src/pipeline_extensions/ingress/video_fetcher.hpp"
+#include "../../src/pipeline_extensions/egress/window_display.hpp"
+#include "../../src/pipeline_extensions/transform/flip_image.hpp"
 
 
 using std::unique_ptr;

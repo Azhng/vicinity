@@ -9,9 +9,14 @@
 
 #include <opencv2/opencv.hpp>
 
+#include <boost/uuid/uuid_io.hpp>
+using boost::uuids::to_string;
+
 using namespace vc;
 using namespace vc::core;
 
+using std::cout;
+using std::endl;
 using std::function;
 using std::make_unique;
 using boost::uuids::uuid;
@@ -56,8 +61,8 @@ void Pipeline::runPipelineOnce() {
 
         if (pipeline_context->queueSize() != 0) {
             ProcessorInstance* next_job = pipeline_context->nextJob();
-            //if (next_job->runOnUIThread()) {
-            if (next_job->runOnUIThread()) {
+//            if (next_job->runOnUIThread()) {
+            if (true) {
                 next_job->runProcessor();
             } else {
                 function<void()> runnable_job = [next_job] () -> void {
@@ -86,6 +91,7 @@ void Pipeline::runPipelineOnce() {
 
 void Pipeline::_check_for_signal() {
     PipelineSignal* signal = pipeline_context->getSignal();
+
     if (signal != nullptr) {
         signal->signalHandler();
         pipeline_context->sendSignal(nullptr); // clear the signal

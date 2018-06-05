@@ -19,8 +19,7 @@ core::ProcessorInstance::ProcessorInstance(ProcessorBase* processor,
            pipeline_context{pipeline_context} { }
 
 void core::ProcessorInstance::attachChildProcessor(ProcessorInstance* child_processor,
-        string child_port_name,
-            string parent_port_name) {
+        string child_port_name, string parent_port_name) {
         // Phase 1 restriction, only single downstream processor
     child_connections[child_processor].push_back(make_tuple(parent_port_name, child_port_name));
     child_processor->parent_connections[this].push_back(make_tuple(parent_port_name, child_port_name));
@@ -29,6 +28,10 @@ void core::ProcessorInstance::attachChildProcessor(ProcessorInstance* child_proc
 void core::ProcessorInstance::removeChildProcessor(ProcessorInstance* child_processor) {
     child_processor->parent_connections.erase(this);
     child_connections.erase(child_processor);
+}
+
+void core::ProcessorInstance::disconnectParents() {
+    parent_connections.clear();
 }
 
 void core::ProcessorInstance::runProcessor() {
@@ -49,10 +52,9 @@ void core::ProcessorInstance::runProcessor() {
         string parent_port_name = get<0>(port_connections[0]);
         string child_port_name = get<1>(port_connections[0]);
 
-
         // if yes, move the data from parent port to current processor port
         // else we reschedule this processor to run again at later date
-        // TODO: implement timeout
+        // TODO: implement timeout when the pipeline is stuck in BACK_OFF_RESTART
         unique_ptr<Mat> upstream_data = parent->getProcessorContext()->fromOutport(parent_port_name);
         if (upstream_data == nullptr) {
             pipeline_context->submitJob(this);

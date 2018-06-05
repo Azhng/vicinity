@@ -45,6 +45,8 @@ public:
 
     void removeChildProcessor(ProcessorInstance*);
 
+    void disconnectParents();
+
     void runProcessor();
 
     const map<ProcessorInstance*, vector<tuple<string, string>>> children() const {

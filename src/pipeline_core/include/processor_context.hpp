@@ -20,10 +20,12 @@ using boost::uuids::uuid;
 
 class ProcessorInstance;
 
+class PipelineSignal;
+
 class ProcessorContext {
 
-    const ProcessorInstance* processor_instance;
-    const PipelineContext* pipeline_context;
+    ProcessorInstance* processor_instance;
+    PipelineContext* pipeline_context;
 
     map<string, unique_ptr<Mat>> inports;
     map<string, unique_ptr<Mat>> outports;
@@ -32,7 +34,7 @@ class ProcessorContext {
 
 public:
 
-    explicit ProcessorContext(ProcessorInstance*, const PipelineContext*);
+    explicit ProcessorContext(ProcessorInstance*, PipelineContext*);
 
     // Phase 1 API:
 
@@ -51,6 +53,8 @@ public:
     void setProcessorState(ProcessorState state) {
         processor_state = state;
     }
+
+    void sendSignalToPipeline(PipelineSignal*);
 
     // Phase 2 API:
 

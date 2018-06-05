@@ -1,5 +1,6 @@
 #include "./include/processor_context.hpp"
 #include "./include/processor_instance.hpp"
+#include "./include/pipeline_signal.hpp"
 #include <cassert>
 #include <iostream>
 #include <vector>
@@ -11,7 +12,7 @@ using namespace vc;
 
 
 core::ProcessorContext::ProcessorContext(core::ProcessorInstance* processor_instance,
-                                       const core::PipelineContext* pipeline_context)
+                                         core::PipelineContext* pipeline_context)
         : processor_instance{processor_instance},
           pipeline_context{pipeline_context},
           processor_state{ProcessorState::EMPTY} {
@@ -77,5 +78,9 @@ void core::ProcessorContext::toOutport(string port_name, unique_ptr<Mat> data) {
     }
 
     outports[port_name] = std::move(data);
+}
+
+void core::ProcessorContext::sendSignalToPipeline(PipelineSignal* signal) {
+    pipeline_context->sendSignal(signal);
 }
 
