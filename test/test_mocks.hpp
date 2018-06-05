@@ -22,7 +22,7 @@ public:
 private:
 
     // create side effect so the execution is visible from outside
-    void _process_singal() override {
+    void _process_signal() override {
         (*i) += 1;
     }
 
@@ -89,3 +89,23 @@ private:
 };
 
 const string MockEgress::MockEgressInportName = "inport";
+
+class MockEgressSideEffect : public ProcessorBase {
+
+public:
+
+    int* val;
+
+    static const string MockEgressSideEffectInportName;
+
+    explicit MockEgressSideEffect(int* _val)
+        : ProcessorBase(ProcessorType::Egress), val{_val} {
+        define_inport(MockEgressSideEffectInportName);
+    }
+private:
+    void processor_function(ProcessorContext*) override {
+        (*val) += 56;
+    }
+};
+
+const string MockEgressSideEffect::MockEgressSideEffectInportName = "inport";

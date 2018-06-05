@@ -1,4 +1,4 @@
-file(GLOB vc_extensions ingress/*.cpp egress/*.cpp transform/*.cpp)
+file(GLOB vc_extensions ingress/*.cpp egress/*.cpp transform/*.cpp signals/*.cpp)
 
 add_library(vic_extensions SHARED ${vc_extensions})
 

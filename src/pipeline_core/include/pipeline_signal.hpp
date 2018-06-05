@@ -9,14 +9,14 @@ class PipelineSignal {
 public:
 
     void signalHandler() {
-        _process_singal();
+        _process_signal();
     }
 
     virtual ~PipelineSignal() {}
 
 private:
 
-    virtual void _process_singal() = 0;
+    virtual void _process_signal() = 0;
 
 };
 
