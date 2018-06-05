@@ -54,6 +54,7 @@ public:
 
     ProcessorInstance* nextJob();
 
+    // TODO: add locking
     template <typename T>
     void store(string, unique_ptr<T> value);
 

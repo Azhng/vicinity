@@ -26,6 +26,11 @@ void ProcessorInstance::attachChildProcessor(ProcessorInstance* child_processor,
     child_processor->parent_connections[this].push_back(make_tuple(parent_port_name, child_port_name));
 }
 
+void ProcessorInstance::removeChildProcessor(ProcessorInstance* child_processor) {
+    child_processor->parent_connections.erase(this);
+    child_connections.erase(child_processor);
+}
+
 void ProcessorInstance::runProcessor() {
     // Phase 1 Implementation
     // TODO: refactor this into middleware stack pattern

@@ -41,6 +41,8 @@ public:
 
     void attachChildProcessor(ProcessorInstance*, string child_port_name, string parent_port_name);
 
+    void removeChildProcessor(ProcessorInstance*);
+
     void runProcessor();
 
     const map<ProcessorInstance*, vector<tuple<string, string>>> children() const {

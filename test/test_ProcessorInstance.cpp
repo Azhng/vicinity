@@ -33,6 +33,26 @@ void test_parent_child_flow_graph() {
     delete transform_ins;
 }
 
+void test_removing_child_from_graph() {
+    ProcessorBase* ingress = new MockIngress();
+    ProcessorBase* transform = new MockTransform();
+
+    ProcessorInstance* ingress_ins = new ProcessorInstance(ingress, nullptr);
+    ProcessorInstance* transform_ins = new ProcessorInstance(transform, nullptr);
+
+    ingress_ins->attachChildProcessor(transform_ins, "inport", "outport");
+    assert(ingress_ins->children().size() == 1);
+    assert(transform_ins->parents().size() == 1);
+    ingress_ins->removeChildProcessor(transform_ins);
+    assert(ingress_ins->children().size() == 0);
+    assert(transform_ins->parents().size() == 0);
+
+
+    delete ingress_ins;
+    delete transform_ins;
+
+}
+
 void test_processor_run_state_change() {
 
     PipelineContext* pipeline_ctx = new PipelineContext();
@@ -167,5 +187,6 @@ int main() {
     test_faulty_processors();
     test_processor_run_state_change();
     test_exception_handling();
+    test_removing_child_from_graph();
 }
 
