@@ -39,13 +39,7 @@ public:
 
     explicit ProcessorInstance(ProcessorBase*, PipelineContext*);
 
-    void attachChildProcessor(ProcessorInstance* child_processor,
-            string child_port_name,
-            string parent_port_name) {
-        // Phase 1 restriction, only single downstream processor
-        child_connections[child_processor].push_back(make_tuple(parent_port_name, child_port_name));
-        child_processor->parent_connections[this].push_back(make_tuple(parent_port_name, child_port_name));
-    }
+    void attachChildProcessor(ProcessorInstance*, string child_port_name, string parent_port_name);
 
     void runProcessor();
 
