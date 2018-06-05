@@ -1,7 +1,9 @@
-file(GLOB v_src pipeline_core/*.cpp)
+file(GLOB vc_core pipeline_core/*.cpp)
 
-add_library(viclib STATIC ${v_src})
+add_library(vic_core STATIC ${vc_core})
 
 add_executable(vicinity main/main.cpp)
 
-target_link_libraries(vicinity viclib ${OpenCV_LIBS} ${Boost_LIBRARIES})
+target_link_libraries(vicinity vic_core ${OpenCV_LIBS} ${Boost_LIBRARIES})
+
+subdirs(pipeline_extensions)
