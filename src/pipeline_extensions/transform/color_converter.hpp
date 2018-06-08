@@ -21,6 +21,7 @@ public:
 
     static const string COLOR_CONVERTER_INPORT;
     static const string COLOR_CONVERTER_OUTPORT;
+    static const string COLOR_CONVERTER_CACHE_KEY;
 
     explicit ColorConverter(ColorConversionCodes);
 

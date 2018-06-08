@@ -14,6 +14,7 @@ using cv::COLOR_BGR2GRAY;
 
 const string ColorConverter::COLOR_CONVERTER_INPORT = "COLOR_CONVERTER_INPORT";
 const string ColorConverter::COLOR_CONVERTER_OUTPORT = "COLOR_CONVERTER_OUTPORT";
+const string ColorConverter::COLOR_CONVERTER_CACHE_KEY = "COLOR_CONVERTER_ORIGINAL_IMAGE";
 
 ColorConverter::ColorConverter(ColorConversionCodes code) :
     ProcessorBase(ProcessorType::Transform),
@@ -25,6 +26,10 @@ ColorConverter::ColorConverter(ColorConversionCodes code) :
 
 void ColorConverter::processor_function(ProcessorContext* ctx) {
     unique_ptr<Mat> image = ctx->fromInport(COLOR_CONVERTER_INPORT);
+    unique_ptr<Mat> original_image = make_unique<Mat>(image->clone());
+
 	cv::cvtColor(*image, *image, conversion_code);
+    ctx->storeToPipeline<Mat>(COLOR_CONVERTER_CACHE_KEY, std::move(original_image));
+
     ctx->toOutport(COLOR_CONVERTER_OUTPORT, std::move(image));
 }
