@@ -28,7 +28,7 @@ VideoFetcher::VideoFetcher()
     }
 }
 
-void VideoFetcher::processor_function(ProcessorContext* ctx)  {
+void VideoFetcher::run(ProcessorContext* ctx)  {
     unique_ptr<Mat> image = make_unique<Mat>();
     bool is_read_successful = cap.read(*image);
 

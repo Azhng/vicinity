@@ -29,9 +29,7 @@ public:
 
     void registeredKeyboardInput(int, unique_ptr<PipelineSignal>);
 
-private:
-
-    void processor_function(ProcessorContext*) override;
+    void run(ProcessorContext*) override;
 
 };
 

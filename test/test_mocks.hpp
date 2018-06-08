@@ -38,8 +38,8 @@ public:
         : ProcessorBase(ProcessorType::Ingress) {
         define_outport(MockIngressOutportName);
     }
-private:
-    void processor_function(ProcessorContext* ctx) override {
+
+    void run(ProcessorContext* ctx) override {
         cout << "entering mock ingress" << endl;
         unique_ptr<Mat> input_mat = make_unique<Mat>(2, 2, CV_8UC3, Scalar(1, 2, 3));
         ctx->toOutport(MockIngressOutportName, std::move(input_mat));
@@ -60,8 +60,8 @@ public:
         define_inport(MockTransformInportName);
         define_outport(MockTransformOutportName);
     }
-private:
-    void processor_function(ProcessorContext* ctx) override {
+
+    void run(ProcessorContext* ctx) override {
         cout << "entering mock transform" << endl;
         unique_ptr<Mat> input_mat = make_unique<Mat>(2, 2, CV_8UC3, Scalar(3, 2, 3));
         ctx->toOutport(MockTransformOutportName, std::move(input_mat));
@@ -82,8 +82,8 @@ public:
         : ProcessorBase(ProcessorType::Egress) {
         define_inport(MockEgressInportName);
     }
-private:
-    void processor_function(ProcessorContext*) override {
+
+    void run(ProcessorContext*) override {
         cout << "entering mock egress" << endl;
     }
 };
@@ -102,8 +102,8 @@ public:
         : ProcessorBase(ProcessorType::Egress), val{_val} {
         define_inport(MockEgressSideEffectInportName);
     }
-private:
-    void processor_function(ProcessorContext*) override {
+
+    void run(ProcessorContext*) override {
         (*val) += 56;
     }
 };

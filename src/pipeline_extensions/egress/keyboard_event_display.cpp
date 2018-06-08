@@ -4,8 +4,6 @@
 #include "../../pipeline_core/include/processor_context.hpp"
 #include "../../pipeline_core/include/pipeline_context.hpp"
 
-using namespace std;
-
 using namespace vc;
 using namespace vc::core;
 using namespace vc::extensions;
@@ -29,7 +27,7 @@ void KeyboardEventDisplay::registeredKeyboardInput(int key, unique_ptr<PipelineS
     registered_keyboard_input[key] = std::move(signal);
 }
 
-void KeyboardEventDisplay::processor_function(ProcessorContext* ctx)  {
+void KeyboardEventDisplay::run(ProcessorContext* ctx)  {
 
     unique_ptr<Mat> image = ctx->fromInport(KEYBOARD_EVENT_DISPLAY_INPORT);
     namedWindow(window_name, WINDOW_NORMAL);

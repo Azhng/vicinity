@@ -37,9 +37,7 @@ public:
           processor_type{processor_type},
           ui_thread{_ui_thread} {}
 
-    void run(ProcessorContext* ctx) {
-        processor_function(ctx);
-    }
+    virtual void run(ProcessorContext* ctx) = 0;
 
     const ProcessorType& getProcessorType() const {
         return processor_type;
@@ -59,15 +57,11 @@ public:
 
     virtual ~ProcessorBase() {}
 
-private:
-
-    // Override this
-    virtual void processor_function(ProcessorContext* ctx) = 0;
 
 protected:
 
     /**
-     * method here are meat to be called by the derived class in the constructor to initialize inports/outports
+     * method here are meant to be called by the derived class in the constructor to initialize inports/outports
      */
 
     // Phase 1 API 

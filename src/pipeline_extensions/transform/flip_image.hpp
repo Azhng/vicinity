@@ -18,9 +18,7 @@ public:
 
     explicit FlipImage();
 
-private:
-
-    void processor_function(ProcessorContext*) override;
+    void run(ProcessorContext*) override;
 
 };
 

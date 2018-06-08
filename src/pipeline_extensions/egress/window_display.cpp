@@ -22,7 +22,7 @@ WindowDisplay::WindowDisplay(string win_name)
     define_inport(WINDOW_DISPLAY_INPORT);
 }
 
-void WindowDisplay::processor_function(ProcessorContext* ctx)  {
+void WindowDisplay::run(ProcessorContext* ctx)  {
     unique_ptr<Mat> image = ctx->fromInport(WINDOW_DISPLAY_INPORT);
     namedWindow(window_name, WINDOW_NORMAL);
     imshow(window_name, *image);

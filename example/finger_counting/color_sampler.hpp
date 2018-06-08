@@ -30,9 +30,9 @@ public:
 
     explicit ColorSampler();
 
-private:
+    void run(ProcessorContext*) override;
 
-    void processor_function(ProcessorContext*) override;
+private:
 
     void _generate_sampling_box();
 

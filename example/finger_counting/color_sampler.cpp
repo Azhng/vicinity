@@ -78,7 +78,7 @@ vector<int> ColorSampler::_extract_mean(const cv::Mat& image, const cv::Rect& re
   return result;
 }
 
-void ColorSampler::processor_function(ProcessorContext* ctx) {
+void ColorSampler::run(ProcessorContext* ctx) {
     unique_ptr<Mat> image = ctx->fromInport(COLOR_SAMPLER_INPORT);
 
     unique_ptr<vector<vector<int>>> sampled_values = make_unique<vector<vector<int>>>();

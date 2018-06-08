@@ -3,7 +3,9 @@
 #include "../../src/pipeline_extensions/egress/window_display.hpp"
 #include "../../src/pipeline_extensions/transform/flip_image.hpp"
 #include "../../src/pipeline_extensions/transform/color_converter.cpp"
+
 #include "./color_sampler.hpp"
+#include "./side_by_side_displayer.hpp"
 
 
 using std::unique_ptr;
@@ -24,7 +26,7 @@ int main() {
     ProcessorBase* flip = new FlipImage();
     ProcessorBase* hsv = new ColorConverter(COLOR_BGR2HSV);
     ProcessorBase* color_sampler = new ColorSampler();
-    ProcessorBase* window_output = new WindowDisplay("Finger Counter");
+    ProcessorBase* window_output = new SideBySideDisplayer("Finger Counter", "Original Image", ColorConverter::COLOR_CONVERTER_CACHE_KEY);
 
     ProcessorInstance* video_fetch_instance = new ProcessorInstance(video_fetch, pipeline_ctx);
     ProcessorInstance* flip_instance = new ProcessorInstance(flip, pipeline_ctx);
@@ -45,7 +47,7 @@ int main() {
             ColorConverter::COLOR_CONVERTER_OUTPORT);
 
     color_sampler_instance->attachChildProcessor(window_output_instance,
-            WindowDisplay::WINDOW_DISPLAY_INPORT,
+            SideBySideDisplayer::KEYBOARD_EVENT_DISPLAY_INPORT,
             ColorSampler::COLOR_SAMPLER_OUTPORT);
 
     pipeline.attachProcessorChain(unique_ptr<ProcessorInstance>(video_fetch_instance));

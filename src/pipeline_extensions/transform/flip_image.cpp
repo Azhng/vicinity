@@ -17,7 +17,7 @@ FlipImage::FlipImage() :
 
 }
 
-void FlipImage::processor_function(ProcessorContext* ctx) {
+void FlipImage::run(ProcessorContext* ctx) {
     unique_ptr<Mat> image = ctx->fromInport(FLIP_IMAGE_INPORT);
     cv::flip(*image, *image, 1);
     ctx->toOutport(FLIP_IMAGE_OUTPORT, std::move(image));

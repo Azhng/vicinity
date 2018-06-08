@@ -50,7 +50,7 @@ core::ProcessorContext::ProcessorContext(core::ProcessorInstance* processor_inst
 
 unique_ptr<Mat> core::ProcessorContext::fromInport(string port_name) {
     if (inports.find(port_name) == inports.end()) {
-        throw std::runtime_error("[ERROR]: Accessing invalid key");
+        throw std::runtime_error("[ERROR]: Accessing invalid port: " + port_name);
     }
 
     return std::move(inports[port_name]);
@@ -58,7 +58,7 @@ unique_ptr<Mat> core::ProcessorContext::fromInport(string port_name) {
 
 unique_ptr<Mat> core::ProcessorContext::fromOutport(string port_name) {
     if (outports.find(port_name) == outports.end()) {
-        throw std::runtime_error("[ERROR]: Accessing invalid key");
+        throw std::runtime_error("[ERROR]: Accessing invalid port: " + port_name);
     }
 
     return std::move(outports[port_name]);
@@ -66,7 +66,7 @@ unique_ptr<Mat> core::ProcessorContext::fromOutport(string port_name) {
 
 void core::ProcessorContext::toInport(string port_name, unique_ptr<Mat> data) {
     if (inports.find(port_name) == inports.end()) {
-        throw std::runtime_error("[ERROR]: Accessing invalid key");
+        throw std::runtime_error("[ERROR]: Accessing invalid port: " + port_name);
     }
 
     inports[port_name] = std::move(data);
@@ -74,7 +74,7 @@ void core::ProcessorContext::toInport(string port_name, unique_ptr<Mat> data) {
 
 void core::ProcessorContext::toOutport(string port_name, unique_ptr<Mat> data) {
     if (outports.find(port_name) == outports.end()) {
-        throw std::runtime_error("[ERROR]: Accessing invalid key");
+        throw std::runtime_error("[ERROR]: Accessing invalid port: " + port_name);
     }
 
     outports[port_name] = std::move(data);

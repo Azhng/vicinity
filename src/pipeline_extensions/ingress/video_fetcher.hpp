@@ -21,11 +21,9 @@ public:
 
     explicit VideoFetcher();
 
+    void run(ProcessorContext*) override;
+
     ~VideoFetcher();
-
-private:
-
-    void processor_function(ProcessorContext*) override;
 
 };
 

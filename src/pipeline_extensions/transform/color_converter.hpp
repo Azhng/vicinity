@@ -25,9 +25,7 @@ public:
 
     explicit ColorConverter(ColorConversionCodes);
 
-private:
-
-    void processor_function(ProcessorContext*) override;
+    void run(ProcessorContext*) override;
 
 };
 

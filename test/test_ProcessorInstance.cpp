@@ -126,8 +126,8 @@ public:
         : ProcessorBase(ProcessorType::Ingress) {
         define_outport(MockIngress::MockIngressOutportName);
     }
-private:
-    void processor_function(ProcessorContext*) override { }
+
+    void run(ProcessorContext*) override { }
 };
 
 
@@ -160,8 +160,8 @@ public:
         : ProcessorBase(ProcessorType::Ingress) {
         define_outport(MockIngress::MockIngressOutportName);
     }
-private:
-    void processor_function(ProcessorContext*) override {
+
+    void run(ProcessorContext*) override {
         throw std::runtime_error("testing exception");
     }
 };

@@ -26,9 +26,7 @@ public:
         define_outport("outport");
     }
 
-private:
-
-    void processor_function(ProcessorContext*) override { }
+    void run(ProcessorContext*) override { }
 
 };
 
@@ -49,9 +47,7 @@ public:
         define_inport("inport");
     }
 
-private:
-
-    void processor_function(ProcessorContext*) override { }
+    void run(ProcessorContext*) override { }
 
 };
 int main() {

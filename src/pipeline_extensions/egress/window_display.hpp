@@ -21,9 +21,7 @@ public:
 
     explicit WindowDisplay(string);
 
-private:
-
-    void processor_function(ProcessorContext*) override;
+    void run(ProcessorContext*) override;
 
 };
 

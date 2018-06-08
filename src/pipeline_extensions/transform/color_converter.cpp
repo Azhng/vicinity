@@ -24,7 +24,7 @@ ColorConverter::ColorConverter(ColorConversionCodes code) :
     define_outport(COLOR_CONVERTER_OUTPORT);
 }
 
-void ColorConverter::processor_function(ProcessorContext* ctx) {
+void ColorConverter::run(ProcessorContext* ctx) {
     unique_ptr<Mat> image = ctx->fromInport(COLOR_CONVERTER_INPORT);
     unique_ptr<Mat> original_image = make_unique<Mat>(image->clone());
 
