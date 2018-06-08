@@ -7,7 +7,7 @@ find_package( Boost COMPONENTS system REQUIRED )
 
 enable_testing()
 
-include_directories( ${BOOST_INCLUDE_DIR} )
+include_directories( ${Boost_INCLUDE_DIRS} )
 
 set (CMAKE_CXX_FLAGS "--std=c++17 -I/usr/local/include/opencv2 ${CMAKE_CXX_FLAGS}")
 
@@ -16,6 +16,7 @@ option(BUILD_TEST "Building unit tests" OFF)
 option(BUILD_EXAMPLE "Building examples" OFF)
 message(STATUS "Building Release version: ${RELEASE}")
 message(STATUS "Building unit tests: ${BUILD_TEST}")
+message(STATUS "BOOST_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
 
 subdirs(src)
 
