@@ -38,5 +38,7 @@ private:
 
     void _generate_background_sampling_box();
 
+    vector<int> _extract_mean(const cv::Mat&, const cv::Rect&);
+
 };
 

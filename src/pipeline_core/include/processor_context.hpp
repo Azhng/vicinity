@@ -56,6 +56,12 @@ public:
 
     void sendSignalToPipeline(PipelineSignal*);
 
+    template <typename T>
+    void storeToPipeline(string, unique_ptr<T> value);
+
+    template <typename T>
+    T* retrieveFromPipeline(string);
+
     // Phase 2 API:
 
     //template <typename T>
@@ -72,6 +78,17 @@ public:
 
 
 };
+
+
+template <typename T>
+void ProcessorContext::storeToPipeline(string key, unique_ptr<T> value) {
+    pipeline_context->store<T>(key, std::move(value));
+}
+
+template <typename T>
+T* ProcessorContext::retrieveFromPipeline(string key) {
+    return pipeline_context->retrieve<T>(key);
+}
 
 };
 
