@@ -51,6 +51,14 @@ void ContourDetector::run(ProcessorContext* ctx) {
                                    cv::Point(rectangle.x + rectangle.width, rectangle.y + rectangle.height),
                                    cv::Scalar(0, 255, 0), 2);
 
+    // detect convect hull
+    std::vector<std::vector<cv::Point>> hull_vertices(contours.size());
+	for (size_t i = 0; i < contours.size(); i++) {
+		cv::convexHull(contours[i], hull_vertices[i], false);
+	}
+
+    cv::drawContours(*original_image, hull_vertices, mat_idx, cv::Scalar(0, 255, 255), 2, 8, std::vector<cv::Vec4i>(), 0, cv::Point());
+
     ctx->toOutport(CONTOUR_DETECTOR_OUTPORT, std::move(image));
 }
 
