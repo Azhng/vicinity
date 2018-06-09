@@ -46,7 +46,7 @@ int main() {
                 window->disconnectParents();
             });
 
-    LineageModifer* add_hsv_to_fip = new LineageModifer(&pipeline,
+    LineageModifer* add_hsv_to_flip = new LineageModifer(&pipeline,
             flip_instance->getUUID(),
             grey_scale_instance->getUUID(),
             hsv_instance->getUUID(),
@@ -76,7 +76,7 @@ int main() {
 
     SignalStack* switch_to_hsv = new SignalStack(
             unique_ptr<PipelineSignal>(disconnect_window_from_grey),
-            make_unique<SignalStack>(unique_ptr<PipelineSignal>(add_hsv_to_fip), 
+            make_unique<SignalStack>(unique_ptr<PipelineSignal>(add_hsv_to_flip), 
                 make_unique<SignalStack>(unique_ptr<PipelineSignal>(add_window_to_hsv), nullptr)));
 
     SignalStack* switch_to_grey = new SignalStack(

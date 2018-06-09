@@ -1,4 +1,5 @@
 #include "./color_sampler.hpp"
+#include "../../src/pipeline_extensions/transform/color_converter.hpp"
 #include "../../src/pipeline_core/include/processor_context.hpp"
 #include "../../src/pipeline_core/include/processor_type.hpp"
 #include <memory>
@@ -16,6 +17,9 @@ using cv::COLOR_BGR2GRAY;
 
 const string ColorSampler::COLOR_SAMPLER_INPORT = "COLOR_SAMPLER_INPORT";
 const string ColorSampler::COLOR_SAMPLER_OUTPORT = "COLOR_SAMPLER_OUTPORT";
+
+const string ColorSampler::SAMPLED_STORE_KEY = "SAMPLE_VALUES";
+const string ColorSampler::BG_SAMPLED_STORE_KEY = "BG_SAMPLED_VALUES";
 
 ColorSampler::ColorSampler()
     : ProcessorBase(ProcessorType::Transform) {
@@ -78,8 +82,13 @@ vector<int> ColorSampler::_extract_mean(const cv::Mat& image, const cv::Rect& re
   return result;
 }
 
+void printVector(const char * str, const vector<int>& s){
+    std::cout << str << " " << s[0] << " " << s[1] << " " << s[2] << std::endl;
+}
+
 void ColorSampler::run(ProcessorContext* ctx) {
     unique_ptr<Mat> image = ctx->fromInport(COLOR_SAMPLER_INPORT);
+    Mat* original_image = ctx->retrieveFromPipeline<Mat>(vc::extensions::ColorConverter::COLOR_CONVERTER_CACHE_KEY);
 
     unique_ptr<vector<vector<int>>> sampled_values = make_unique<vector<vector<int>>>();
     unique_ptr<vector<vector<int>>> background_values = make_unique<vector<vector<int>>>();
@@ -93,17 +102,17 @@ void ColorSampler::run(ProcessorContext* ctx) {
     }
 
     for(const Rect& r : sampling_boxes){
-      rectangle(*image, r, cv::Scalar(0, 255, 0), 3);
       sampled_values->push_back(_extract_mean(*image, r));
+      rectangle(*original_image, r, cv::Scalar(0, 255, 0), 3);
     }
     
     for(const Rect& r : background_sampling_box){
-      rectangle(*image, r, cv::Scalar(0, 255, 255), 3);
       background_values->push_back(_extract_mean(*image, r));
+      rectangle(*original_image, r, cv::Scalar(0, 255, 255), 3);
     }
 
-    ctx->storeToPipeline<vector<vector<int>>>("sampled_values", std::move(sampled_values));
-    ctx->storeToPipeline<vector<vector<int>>>("background_values", std::move(background_values));
+    ctx->storeToPipeline<vector<vector<int>>>(SAMPLED_STORE_KEY, std::move(sampled_values));
+    ctx->storeToPipeline<vector<vector<int>>>(BG_SAMPLED_STORE_KEY, std::move(background_values));
 
     ctx->toOutport(COLOR_SAMPLER_OUTPORT, std::move(image));
 }

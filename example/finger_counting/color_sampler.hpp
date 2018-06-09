@@ -28,6 +28,9 @@ public:
     static const string COLOR_SAMPLER_INPORT;
     static const string COLOR_SAMPLER_OUTPORT;
 
+    static const string SAMPLED_STORE_KEY;
+    static const string BG_SAMPLED_STORE_KEY;
+
     explicit ColorSampler();
 
     void run(ProcessorContext*) override;

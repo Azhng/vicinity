@@ -28,7 +28,9 @@ void ColorConverter::run(ProcessorContext* ctx) {
     unique_ptr<Mat> image = ctx->fromInport(COLOR_CONVERTER_INPORT);
     unique_ptr<Mat> original_image = make_unique<Mat>(image->clone());
 
-	cv::cvtColor(*image, *image, conversion_code);
+    cv::cvtColor(*image, *image, conversion_code);
+    // delete this
+    cv::GaussianBlur(*image, *image, cv::Size(15, 15), 0.0, 0.0);
     ctx->storeToPipeline<Mat>(COLOR_CONVERTER_CACHE_KEY, std::move(original_image));
 
     ctx->toOutport(COLOR_CONVERTER_OUTPORT, std::move(image));
