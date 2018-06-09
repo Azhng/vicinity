@@ -22,10 +22,6 @@ SampleThresholding::SampleThresholding(std::string _sampled_values_key,
     define_outport(SAMPLE_THRESHOLDING_OUTPORT);
 }
 
-void printScalar(const char * str, const cv::Scalar& s){
-    std::cout << str << " " << s[0] << " " << s[1] << " " << s[2] << std::endl;
-}
-
 void SampleThresholding::run(ProcessorContext* ctx) {
 
     std::unique_ptr<cv::Mat> image = ctx->fromInport(SAMPLE_THRESHOLDING_INPORT);
@@ -38,9 +34,6 @@ void SampleThresholding::run(ProcessorContext* ctx) {
         // compute lower/upper bound we will be using to threshold the image
         cv::Scalar lower_bound = _compute_color_bound(sampled_value, (-1) * tolerance);
         cv::Scalar upper_bound = _compute_color_bound(sampled_value, tolerance);
-        
-        printScalar("lowerbound", lower_bound);
-        printScalar("upperbound", upper_bound);
 
         cv::Mat thresholded;
         cv::inRange(*image, lower_bound, upper_bound, thresholded);

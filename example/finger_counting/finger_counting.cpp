@@ -11,6 +11,7 @@
 #include "./side_by_side_displayer.hpp"
 #include "./sample_thresholding.hpp"
 #include "./contour_detector.hpp"
+#include "./convexity_detector.hpp"
 
 
 using std::unique_ptr;
@@ -33,6 +34,7 @@ int main() {
     ProcessorBase* color_sampler = new ColorSampler();
     ProcessorBase* sample_thresholding = new SampleThresholding(ColorSampler::SAMPLED_STORE_KEY, ColorSampler::BG_SAMPLED_STORE_KEY, 15);
     ProcessorBase* contour_detector = new ContourDetector(ColorConverter::COLOR_CONVERTER_CACHE_KEY);
+    ProcessorBase* convextiy_detector = new ConvexityDetecter(ColorConverter::COLOR_CONVERTER_CACHE_KEY, ContourDetector::CONTOUR_DEFECT_STORE_KEY);
     SideBySideDisplayer* window_output = new SideBySideDisplayer("Finger Counter", "Original Image", ColorConverter::COLOR_CONVERTER_CACHE_KEY);
 
     ProcessorInstance* video_fetch_instance = new ProcessorInstance(video_fetch, pipeline_ctx);
@@ -41,6 +43,7 @@ int main() {
     ProcessorInstance* color_sampler_instance = new ProcessorInstance(color_sampler, pipeline_ctx);
     ProcessorInstance* sample_thresholding_instance = new ProcessorInstance(sample_thresholding, pipeline_ctx);
     ProcessorInstance* contour_detector_instance = new ProcessorInstance(contour_detector, pipeline_ctx);
+    ProcessorInstance* convexity_detector_instance = new ProcessorInstance(convextiy_detector, pipeline_ctx);
     ProcessorInstance* window_output_instance = new ProcessorInstance(window_output, pipeline_ctx);
 
     LambdaSignal* disconnect_window_from_upstream = new LambdaSignal(&pipeline,
@@ -64,10 +67,10 @@ int main() {
             ColorSampler::COLOR_SAMPLER_INPORT);
 
     LambdaSignal* add_window_to_thresholder = new LambdaSignal(&pipeline,
-            [contour_detector_instance, window_output_instance](Pipeline*) -> void {
-                contour_detector_instance->attachChildProcessor(window_output_instance,
+            [convexity_detector_instance, window_output_instance](Pipeline*) -> void {
+                convexity_detector_instance->attachChildProcessor(window_output_instance,
                         SideBySideDisplayer::KEYBOARD_EVENT_DISPLAY_INPORT,
-                        ContourDetector::CONTOUR_DETECTOR_OUTPORT);
+                        ConvexityDetecter::CONVEXITY_DETECTOR_OUTPORT);
             });
 
     LambdaSignal* add_window_to_sampler = new LambdaSignal(&pipeline,
@@ -107,11 +110,16 @@ int main() {
             ContourDetector::CONTOUR_DETECTOR_INPORT,
             SampleThresholding::SAMPLE_THRESHOLDING_OUTPORT);
 
+    contour_detector_instance->attachChildProcessor(convexity_detector_instance,
+            ConvexityDetecter::CONVEXITY_DETECTOR_INPORT,
+            ContourDetector::CONTOUR_DETECTOR_OUTPORT);
+
 
     window_output->registeredKeyboardInput('a', unique_ptr<PipelineSignal>(switch_to_thresholder));
     window_output->registeredKeyboardInput('b', unique_ptr<PipelineSignal>(switch_to_sampler));
 
     pipeline.attachProcessorChain(unique_ptr<ProcessorInstance>(video_fetch_instance));
     pipeline.attachProcessor(unique_ptr<ProcessorInstance>(sample_thresholding_instance));
+    pipeline.attachProcessor(unique_ptr<ProcessorInstance>(contour_detector_instance));
     pipeline.runPipeline();
 }
