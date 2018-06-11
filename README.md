@@ -1,4 +1,4 @@
-# Vicinity - Distributed Real-Time image processing pipeline
+# Vicinity - ~~Distributed~~ Real-Time image processing pipeline
 
 Design doc: https://docs.google.com/document/d/1QZ93JeKcHi5c9KIWQmusRuJG1kim8K3v0Ucr8kU5ZUc/edit?usp=sharing
 
